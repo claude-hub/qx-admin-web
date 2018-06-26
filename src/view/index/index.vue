@@ -1,5 +1,5 @@
 <template>
-  <div>首页-测试1</div>
+  <div>首页-测试-push-all</div>
 </template>
 
 <script>
