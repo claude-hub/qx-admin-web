@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="login-container">
+    <div class="login-container" @keyup.enter.native="handleLogin">
       <div class="login-info text-white animated fadeInLeft">
         <h2 class="login-info-title">千寻---快速开发脚手架---后台登录</h2>
         <ul class="login-info-list">
@@ -63,7 +63,7 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    background-image: url("../../assets/images/login.png");
+    background-image: url("../../../assets/images/login.png");
     background-size: cover;
     .login-container {
       display: flex;
@@ -125,7 +125,8 @@ export default {
     .login-code {
       display: flex;
       justify-content: space-between;
-      margin-left: 10px;
+      margin-left: 15px;
+      cursor: pointer;
     }
   }
 </style>

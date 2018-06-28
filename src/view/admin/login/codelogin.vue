@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {isvalidatemobile} from '@/util/validate'
+import {isvalidatemobile} from '@/tools/validate'
 import {mapGetters} from 'vuex'
 
 export default {

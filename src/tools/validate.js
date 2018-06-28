@@ -1,7 +1,3 @@
-export function isvalidUsername (str) {
-  const validMap = ['admin', 'editor']
-  return validMap.indexOf(str.trim()) >= 0
-}
 /**
  * 判断手机号码是否正确
  */
