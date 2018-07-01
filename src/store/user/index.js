@@ -3,7 +3,7 @@
  */
 
 import {LoginApi} from '@/view/admin/login/login-api';
-import {Msg} from '../../tools/message';
+import {Msg} from '@/tools/message';
 import {Auth} from './auth';
 
 const defaultUser = {login: '', password: '', remember: false};
@@ -19,7 +19,9 @@ export default {
     /** 是否登陆 */
     isLogin: Auth.getLogin() || false,
     /** 角色权限点 */
-    roles: ['admin'], // todo 需要要动态获取赋值
+    roles: ['admin'],
+    /** 用户菜单列表 **/
+    userMenu: Auth.getUserMenu() || {},
   },
   /** 计算属性 */
   getters: {
@@ -34,12 +36,14 @@ export default {
         state.accountPwd = data.params;
         Auth.setAccountPwd(data.params)
       }
-      state.token = data.data.token;
+      state.token = data.data.data.currentToken;
       state.userInfo = {};
       state.isLogin = true;
-      Auth.setUserInfo({});
+      state.userMenu = {};
+      Auth.setUserMenu(data.data.data.menus)
+      Auth.setUserInfo(data.data.data);
       Auth.setLogin();
-      Auth.setToken(data.data.token)
+      Auth.setToken(data.data.data.currentToken)
     },
     ACCOUNT_LOGOUT_FAILURE(state) {
       state.token = null;
@@ -56,7 +60,6 @@ export default {
   actions: {
     /** 登录 */
     LoginByUsername({commit}, params) {
-      console.log(params)
       return new Promise((resolve, reject) => {
         LoginApi.login(params).then((res) => {
           Msg.success('登录成功');

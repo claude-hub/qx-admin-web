@@ -41,7 +41,6 @@
 
 <script>
 import { randomLenNum } from '@/tools/utiltools'
-import axios from 'axios'
 
 export default {
   name: 'userlogin',
@@ -86,25 +85,25 @@ export default {
     //     console.log(error)
     //   })
 
-    const server = axios.create({
-      timeout: 1000 * 30,
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Access-Control-Allow-Origin': '*'
-      }
-    })
-
-    server.post('http://localhost:8888/api/admin/auth/sign_in', {
-      'loginStr': '15223246130',
-      'password': '123456'
-    })
-      .then(function (response) {
-        console.log(response)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    // const server = axios.create({
+    //   timeout: 1000 * 30,
+    //   withCredentials: true,
+    //   headers: {
+    //     'Content-Type': 'application/json; charset=utf-8',
+    //     'Access-Control-Allow-Origin': '*'
+    //   }
+    // })
+    //
+    // server.post('http://localhost:8888/api/admin/auth/sign_in', {
+    //   'loginStr': '15223246130',
+    //   'password': '123456'
+    // })
+    //   .then(function (response) {
+    //     console.log(response)
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error)
+    //   })
   },
   computed: {
   },
@@ -124,8 +123,6 @@ export default {
         if (valid) {
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.$router.push({path: '/admin'})
-          }).catch(() => {
-            console.log('err')
           })
         }
       })

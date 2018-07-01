@@ -4,4 +4,5 @@ export const getters = {
   token: state => state.user.token,
   accountPwd: state => state.user.accountPwd,
   roles: state => state.user.roles,
+  userMenu: state => state.user.userMenu,
 };

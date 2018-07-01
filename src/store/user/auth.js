@@ -2,6 +2,18 @@ import Cookies from 'js-cookie'
 const sessionStorage = window.sessionStorage;
 
 export class Auth {
+  static setUserMenu(value = {}) {
+    return sessionStorage.setItem('user.userMenu', JSON.stringify(value))
+  }
+
+  static getUserMenu() {
+    return JSON.parse(sessionStorage.getItem('user.userMenu'))
+  }
+
+  static removeUserMenu() {
+    return sessionStorage.removeItem('user.userMenu')
+  }
+
   static setUserInfo(value = {}) {
     return sessionStorage.setItem('user.userInfo', JSON.stringify(value))
   }
