@@ -7,29 +7,20 @@
     </transition>
     <transition-group name="fade">
       <template v-if="!isCollapse">
-        <span class="logo_title is-bold" key="1">{{website.title}} </span>
-        <span class="logo_subtitle" key="2">{{website.author}}</span>
+        <span class="logo_title is-bold" key="1"> 千寻 </span>
+        <span class="logo_subtitle" key="2">快速开发脚手架</span>
       </template>
     </transition-group>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   name: 'logo',
   data () {
     return {}
   },
-  props: ['isCollapse'],
-  created () {},
-  computed: {
-    ...mapGetters(['website']),
-    type: function (val) {
-      return this.website.logo.indexOf('static') !== -1
-    }
-  },
-  methods: {}
+  props: ['isCollapse']
 }
 </script>
 <style scoped="scoped" lang="scss">

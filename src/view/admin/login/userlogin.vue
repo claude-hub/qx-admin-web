@@ -47,7 +47,7 @@ export default {
   data () {
     return {
       loginForm: {
-        loginStr: '15223246130',
+        loginStr: '123456',
         password: '123456',
         captcha: 'qwee',
         remember: false
@@ -76,38 +76,6 @@ export default {
   created () {
     this.refreshCode()
   },
-  mounted () {
-    // axios.post('http://localhost:8888/api/admin/auth/sign_in?loginStr=15223246130&password=123456')
-    //   .then(function (response) {
-    //     console.log(response)
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //   })
-
-    // const server = axios.create({
-    //   timeout: 1000 * 30,
-    //   withCredentials: true,
-    //   headers: {
-    //     'Content-Type': 'application/json; charset=utf-8',
-    //     'Access-Control-Allow-Origin': '*'
-    //   }
-    // })
-    //
-    // server.post('http://localhost:8888/api/admin/auth/sign_in', {
-    //   'loginStr': '15223246130',
-    //   'password': '123456'
-    // })
-    //   .then(function (response) {
-    //     console.log(response)
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //   })
-  },
-  computed: {
-  },
-  props: [],
   methods: {
     refreshCode () {
       let randomStr = randomLenNum(this.code.len, true)

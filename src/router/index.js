@@ -8,12 +8,12 @@ const router = new Router({
     {
       path: '/',
       name: 'clinetindex',
-      component: () => import('../view/client/index/index'),
+      component: () => import('../view/client/home/index'),
     },
     {
       path: '/admin',
       name: 'adminindex',
-      component: () => import('../view/admin/index/index'),
+      component: () => import('../view/admin/home/index'),
     },
     {
       path: '/admin/login',

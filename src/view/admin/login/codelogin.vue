@@ -28,7 +28,6 @@
 
 <script>
 import {isvalidatemobile} from '@/tools/validate'
-import {mapGetters} from 'vuex'
 
 export default {
   name: 'codelogin',
@@ -58,26 +57,9 @@ export default {
       }
     }
   },
-  created () {
-  },
-  mounted () {
-  },
-  computed: {
-    ...mapGetters(['tagWel'])
-  },
   props: [],
   methods: {
     handleLogin () {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.$store
-            .dispatch('LoginByPhone', this.loginForm)
-            .then(response => {
-              this.$store.commit('ADD_TAG', this.tagWel)
-              this.$router.push({path: this.tagWel.value})
-            })
-        }
-      })
     }
   }
 }

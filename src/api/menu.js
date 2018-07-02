@@ -1,11 +1,10 @@
 import {server} from '@/tools/server'
 
 /**
- * 登陆
+ * 用户api接口
  */
-export class IndexApi {
-
-  static menus(params) {
+export class MenuApi {
+  static userMenu(params) {
     return server.get('/admin/auth/menu', params)
   }
 }

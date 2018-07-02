@@ -1,9 +1,9 @@
 import {server} from '@/tools/server'
 
 /**
- * 登陆
+ * 用户api接口
  */
-export class LoginApi {
+export class UserApi {
   static login(params) {
     return server.post('/admin/auth/sign_in', params)
   }
