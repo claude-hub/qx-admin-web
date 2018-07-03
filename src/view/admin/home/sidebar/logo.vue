@@ -1,8 +1,8 @@
 <template>
   <div class="logo">
     <transition name="fade">
-      <span v-if="isCollapse" class="logo_title is-bold " key="0" :class="{'is-text':!type,'is-img':type}">
-         千寻 脚手架
+      <span v-if="isCollapse" class="logo_title is-bold " key="0">
+         千寻
       </span>
     </transition>
     <transition-group name="fade">
@@ -17,59 +17,53 @@
 <script>
 export default {
   name: 'logo',
-  data () {
-    return {}
-  },
   props: ['isCollapse']
 }
 </script>
 <style scoped="scoped" lang="scss">
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter-active {
-  transition: opacity 2.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-.logo {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 230px;
-  height: 64px;
-  line-height: 64px;
-  background: #002140;
-  color: #fdfdfd;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-.logo_title {
-  padding: 0 5px 0 0;
-  color: #409eff;
-  font-size: 28px;
-  &.is-bold {
-    font-weight: 700;
+  /** 渐进渐出特效 **/
+  .fade-leave-active {
+    transition: opacity 0.2s;
   }
-}
-.is-text {
-  position: absolute;
-  top: 0;
-  left: 10px;
-}
-.is-img {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-.logo_subtitle {
-  font-size: 16px;
-  padding-top: 5px;
-}
+
+  .fade-enter-active {
+    transition: opacity 2.5s;
+  }
+
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  /*****/
+
+  .logo {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 230px;
+    height: 64px;
+    line-height: 64px;
+    background: #002140;
+    color: #fdfdfd;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .logo_title {
+    padding: 0 5px 0 0;
+    color: #409eff;
+    font-size: 28px;
+    &.is-bold {
+      font-weight: 700;
+    }
+  }
+
+  .logo_subtitle {
+    font-size: 16px;
+    padding-top: 5px;
+  }
 </style>

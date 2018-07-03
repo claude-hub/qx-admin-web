@@ -13,26 +13,25 @@
 import {setUrlPath, initMenu} from '@/tools/utiltools'
 import SidebarItem from './sidebarItem'
 import Logo from './logo'
-import {validatenull} from '@/tools/validate'
+// import {validatenull} from '@/tools/validate'
 import {mapGetters} from 'vuex'
+import './sidebar.scss'
 
 export default {
   name: 'sidebar',
   components: {SidebarItem, Logo},
-  data () {
-    return {
-      isCollapse: false
-    }
-  },
   created () {
-    if (validatenull(this.userMenu)) {
-      this.$store.dispatch('GetUserMenu').then(data => {
-        initMenu(this.$router, data)
-      })
-    }
+    // if (validatenull(this.userMenu)) {
+    //   this.$store.dispatch('GetUserMenu').then(data => {
+    //     initMenu(this.$router, data)
+    //   })
+    // }
+    this.$store.dispatch('GetUserMenu').then(data => {
+      initMenu(this.$router, data)
+    })
   },
   computed: {
-    ...mapGetters(['userMenu']),
+    ...mapGetters(['userMenu', 'isCollapse']),
     nowTagValue: function () {
       return setUrlPath(this.$route)
     }

@@ -3,6 +3,7 @@
     <Sidebar class="left"></Sidebar>
     <div class="right">
       <Top></Top>
+      <div style="margin-top: 64px;height: 100%">body</div>
     </div>
   </div>
 </template>

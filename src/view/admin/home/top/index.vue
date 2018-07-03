@@ -9,16 +9,26 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters(['isFullScreen', 'isCollapse'])
+  },
+  methods: {
+    showCollapse () {
+      this.$store.commit('SET_COLLAPSE')
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
   .top-container{
-    position: absolute;
+    position: fixed;
     top: 0;
+    width: calc(100% - 230px);
     height: 64px;
     border-bottom: 1px solid #eee;
-    width: 100%;
-    padding: 0 10px;
+    padding-left: 10px;
     .tags-breadcrumb{
       cursor: pointer;
       .icon-daohang{

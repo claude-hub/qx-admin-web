@@ -1,17 +1,17 @@
 @font-face {
   font-family: 'iconfont';  /* project id 642098 */
-  src: url('//at.alicdn.com/t/font_642098_ogrten5in7f.eot');
-  src: url('//at.alicdn.com/t/font_642098_ogrten5in7f.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_642098_ogrten5in7f.woff') format('woff'),
-  url('//at.alicdn.com/t/font_642098_ogrten5in7f.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_642098_ogrten5in7f.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_642098_ty9fipvwiq.eot');
+  src: url('//at.alicdn.com/t/font_642098_ty9fipvwiq.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_642098_ty9fipvwiq.woff') format('woff'),
+  url('//at.alicdn.com/t/font_642098_ty9fipvwiq.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_642098_ty9fipvwiq.svg#iconfont') format('svg');
 }
 
-.iconfont {
+.iconfont{
   font-family:"iconfont" !important;
-  font-size:16px;
-  font-style:normal;
+  font-size:16px;font-style:normal;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -26,3 +26,12 @@
 .icon-shouji:before { content: "\e625"; }
 
 .icon-daohang:before { content: "\e62b"; }
+
+.icon-system:before { content: "\e603"; }
+
+.icon-caidanshezhi:before { content: "\e65f"; }
+
+.icon-jueseguanli:before { content: "\e602"; }
+
+.icon-yonghushezhi:before { content: "\e600"; }
+
