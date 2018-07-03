@@ -56,7 +56,6 @@ export default {
 
 <style lang="scss">
   .login {
-    z-index: -999;
     content: "";
     position: absolute;
     left: 0;
@@ -65,6 +64,8 @@ export default {
     height: 100%;
     background-image: url("../../../assets/images/login.png");
     background-size: cover;
+    overflow-y: auto;
+    overflow-x: hidden;
     .login-container {
       display: flex;
       align-items: center;

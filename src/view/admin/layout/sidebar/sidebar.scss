@@ -5,6 +5,8 @@
     width: 64px !important;
     .logo {
       width: 64px !important;
+      transition:width .6s;
+      -webkit-transition:width .6s; /* Safari */
     }
     .el-menu--display,
     .el-menu--display+ .el-submenu__icon-arrow {

@@ -1,8 +1,8 @@
 <template>
-  <div>adminhome</div>
+  <div>user</div>
 </template>
 <script>
 export default {
-  name: 'adminhome'
+  name: 'usermanage'
 }
 </script>

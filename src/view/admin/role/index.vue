@@ -1,8 +1,8 @@
 <template>
-  <div>adminhome</div>
+  <div>role</div>
 </template>
 <script>
 export default {
-  name: 'adminhome'
+  name: 'rolemanage'
 }
 </script>

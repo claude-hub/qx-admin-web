@@ -37,10 +37,6 @@ export default {
   /*****/
 
   .logo {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 230px;
     height: 64px;
     line-height: 64px;
@@ -49,8 +45,8 @@ export default {
     text-align: center;
     font-size: 20px;
     font-weight: 600;
-    overflow: hidden;
-    box-sizing: border-box;
+    transition:width .6s;
+    -webkit-transition:width .6s; /* Safari */
   }
 
   .logo_title {

@@ -42,9 +42,9 @@ export default {
     },
     open (item) {
       this.$router.push({
-        path: resolveUrlPath(item.path, item.name),
-        query: item.query
+        path: resolveUrlPath(item.path, item.name)
       })
+      this.$store.dispatch('SetPageState', {name: item.name, path: item.path})
     }
   }
 }

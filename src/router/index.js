@@ -12,8 +12,30 @@ const router = new Router({
     },
     {
       path: '/admin',
-      name: 'adminindex',
-      component: () => import('../view/admin/home/index'),
+      name: 'adminlayout',
+      component: () => import('../view/admin/layout/index'),
+      children: [
+        {
+          path: '/',
+          name: 'adminhome',
+          component: () => import('../view/admin/home/index')
+        },
+        {
+          path: '/admin/user',
+          name: 'usermanage',
+          component: () => import('../view/admin/user/index')
+        },
+        {
+          path: '/admin/role',
+          name: 'rolemanage',
+          component: () => import('../view/admin/role/index')
+        },
+        {
+          path: '/admin/menu',
+          name: 'menumanage',
+          component: () => import('../view/admin/menu/index')
+        }
+      ]
     },
     {
       path: '/admin/login',

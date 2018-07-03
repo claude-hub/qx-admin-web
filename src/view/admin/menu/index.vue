@@ -1,8 +1,8 @@
 <template>
-  <div>adminhome</div>
+  <div>menu</div>
 </template>
 <script>
 export default {
-  name: 'adminhome'
+  name: 'menumanage'
 }
 </script>

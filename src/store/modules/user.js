@@ -34,6 +34,13 @@ const user = {
     SET_MENU(state, userMenu) {
       state.userMenu = userMenu
       setStore('userMenu',userMenu)
+    },
+    REMOVE_TOKEN(state, token){
+      removeCookies('token')
+    },
+    REMOVE_MENU_MSG(state){
+      removeStore('userInfo')
+      removeStore('permissions')
     }
   },
   /** Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。 */
@@ -61,6 +68,10 @@ const user = {
            reject(err)
         })
       })
+    },
+    LogOut({commit}) {
+      commit('REMOVE_TOKEN')
+      commit('REMOVE_MENU_MSG')
     }
   }
 }

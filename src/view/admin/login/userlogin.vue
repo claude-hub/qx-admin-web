@@ -90,6 +90,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            this.$store.dispatch('SetPageState', {name: '首页', path: '/admin'})
             this.$router.push({path: '/admin'})
           })
         }
