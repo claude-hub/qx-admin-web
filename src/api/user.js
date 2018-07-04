@@ -7,4 +7,7 @@ export class UserApi {
   static login(params) {
     return server.post('/admin/auth/sign_in', params)
   }
+  static getUserList(params) {
+    return server.get('/admin/SysUser/query', params)
+  }
 }

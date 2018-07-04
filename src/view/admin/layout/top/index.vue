@@ -98,11 +98,11 @@ export default {
     .container {
       display: flex;
       justify-content: space-between;
-      line-height: 64px;
       height: 64px;
       .left-menu {
         display: flex;
         justify-content: start;
+        line-height: 64px;
         .menu-item {
           padding: 0 20px;
           cursor: pointer;
@@ -115,8 +115,15 @@ export default {
           color: #409EFF;
         }
       }
-      .item-operate{
-        margin-right: 10px;
+      .top-operate{
+        display: flex;
+        align-items: center;
+        .el-dropdown-link {
+          cursor: pointer;
+        }
+        .item-operate{
+          margin-right: 20px;
+        }
       }
     }
     .tags-breadcrumb {

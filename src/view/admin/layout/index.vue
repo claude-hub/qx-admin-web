@@ -41,6 +41,7 @@ export default {
     }
     .right{
       width: 100%;
+      overflow: hidden;
       position:  relative;
       .body-container{
         margin-top: 104px;
