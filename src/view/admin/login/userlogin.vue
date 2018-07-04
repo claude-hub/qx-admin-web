@@ -41,6 +41,7 @@
 
 <script>
 import { randomLenNum } from '@/tools/utiltools'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'userlogin',
@@ -76,6 +77,9 @@ export default {
   created () {
     this.refreshCode()
   },
+  computed: {
+    ...mapGetters(['defaultHomePage'])
+  },
   methods: {
     refreshCode () {
       let randomStr = randomLenNum(this.code.len, true)
@@ -90,8 +94,8 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-            this.$store.dispatch('SetPageState', {name: '首页', path: '/admin'})
-            this.$router.push({path: '/admin'})
+            this.$store.dispatch('SetPageState', this.defaultHomePage)
+            this.$router.push({path: this.defaultHomePage.path})
           })
         }
       })

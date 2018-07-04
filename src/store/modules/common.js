@@ -2,6 +2,11 @@ import {setStore, getStore, removeStore} from '@/tools/storage'
 
 const common = {
   state: {
+    /** 默认首页路由、名字 **/
+    defaultHomePage: {
+      name: '首页',
+      path: '/admin'
+    },
     /** 菜单是否缩放 **/
     isCollapse: false,
     /** 是否全屏 **/
@@ -18,7 +23,7 @@ const common = {
     SET_COLLAPSE: (state, action) => {
       state.isCollapse = !state.isCollapse
     },
-    SET_FULLSCREEN: (state, action) => {
+    SET_FULL_SCREEN: (state, action) => {
       state.isFullScreen = !state.isFullScreen
     },
     SET_LOCK: (state, action) => {
@@ -44,6 +49,9 @@ const common = {
   actions: {
     SetCollapseState({commit}) {
       commit('SET_COLLAPSE')
+    },
+    SetFullScreen({commit}) {
+      commit('SET_FULL_SCREEN')
     }
   }
 }

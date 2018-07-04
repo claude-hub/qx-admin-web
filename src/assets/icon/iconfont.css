@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'iconfont';  /* project id 642098 */
-  src: url('//at.alicdn.com/t/font_642098_5ykp56qhz75.eot');
-  src: url('//at.alicdn.com/t/font_642098_5ykp56qhz75.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_642098_5ykp56qhz75.woff') format('woff'),
-  url('//at.alicdn.com/t/font_642098_5ykp56qhz75.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_642098_5ykp56qhz75.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_642098_iv8bt5501xb.eot');
+  src: url('//at.alicdn.com/t/font_642098_iv8bt5501xb.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_642098_iv8bt5501xb.woff') format('woff'),
+  url('//at.alicdn.com/t/font_642098_iv8bt5501xb.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_642098_iv8bt5501xb.svg#iconfont') format('svg');
 }
 
 .iconfont{
@@ -38,3 +38,7 @@
 .icon-circle:before { content: "\e64f"; }
 
 .icon-home:before { content: "\e60d"; }
+
+.icon-tuichuquanping:before { content: "\e643"; }
+
+.icon-quanping:before { content: "\e601"; }

@@ -35,13 +35,16 @@ const user = {
       state.userMenu = userMenu
       setStore('userMenu',userMenu)
     },
-    REMOVE_TOKEN(state, token){
+    REMOVE_TOKEN(state){
       removeCookies('token')
     },
     REMOVE_MENU_MSG(state){
       removeStore('userInfo')
       removeStore('permissions')
-    }
+      removeStore('openedPages')
+      removeStore('currentPage')
+      removeStore('userMenu')
+    },
   },
   /** Action 提交的是 mutation，而不是直接变更状态。Action 可以包含任意异步操作。 */
   actions: {

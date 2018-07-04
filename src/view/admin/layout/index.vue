@@ -17,7 +17,6 @@ import Sidebar from './sidebar/index'
 import Top from './top/index'
 
 export default {
-  name: 'adminlayout',
   components: {
     Sidebar,
     Top
@@ -42,6 +41,7 @@ export default {
     }
     .right{
       width: 100%;
+      position:  relative;
       .body-container{
         margin-top: 104px;
         padding: 15px;

@@ -8,7 +8,7 @@ export const getters = {
   isLock: state => state.common.isLock,
   lockPassword: state => state.common.lockPassword,
   theme: state => state.common.theme,
-
+  defaultHomePage: state => state.common.defaultHomePage,
   openedPages: state => state.page.openedPages,
   currentPage: state => state.page.currentPage,
 };

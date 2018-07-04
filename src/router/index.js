@@ -12,7 +12,6 @@ const router = new Router({
     },
     {
       path: '/admin',
-      name: 'adminlayout',
       component: () => import('../view/admin/layout/index'),
       children: [
         {
@@ -34,6 +33,11 @@ const router = new Router({
           path: '/admin/menu',
           name: 'menumanage',
           component: () => import('../view/admin/menu/index')
+        },
+        {
+          path: '/admin/user/edit',
+          name: 'edituser',
+          component: () => import('../view/admin/user/eidt')
         }
       ]
     },
