@@ -1,6 +1,5 @@
 <template>
   <div class="user-body">
-    <comp-filter></comp-filter>
     <comp-table
       :userList="userList"
       :loading= "loading"
@@ -9,7 +8,6 @@
 </template>
 <script>
 import CompTable from './table'
-import CompFilter from './filter'
 import {UserApi} from '@/api/user'
 import {Msg} from '@/tools/message'
 
@@ -22,8 +20,7 @@ export default {
     }
   },
   components: {
-    CompTable,
-    CompFilter
+    CompTable
   },
   mounted () {
     this.loadData()

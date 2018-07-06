@@ -2,7 +2,7 @@
   <div class="login">
     <div class="login-container" @keyup.enter.native="handleLogin">
       <div class="login-info text-white animated fadeInLeft">
-        <h2 class="login-info-title">千寻---快速开发脚手架---后台登录</h2>
+        <h2 class="login-info-title">千寻---通用web系统---后台登录</h2>
         <ul class="login-info-list">
           <li class="login-info-item">
             <i class="el-icon-check"></i>&nbsp;是一个基于Spring Boot、spring security开发基于Vue前后分离的开发平台

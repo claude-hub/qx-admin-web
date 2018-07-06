@@ -35,6 +35,16 @@ const router = new Router({
           component: () => import('../view/admin/menu/index')
         },
         {
+          path: '/admin/dept',
+          name: 'deptmanage',
+          component: () => import('../view/admin/dept/index')
+        },
+        {
+          path: '/admin/log',
+          name: 'logmanage',
+          component: () => import('../view/admin/log/index')
+        },
+        {
           path: '/admin/user/edit',
           name: 'edituser',
           component: () => import('../view/admin/user/eidt')

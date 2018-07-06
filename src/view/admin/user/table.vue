@@ -1,5 +1,25 @@
 <template>
   <div>
+    <div class="user-filter">
+      <div class="query">
+        <el-input
+          clearable
+          size="small"
+          placeholder="用户信息"
+          class="query-input"
+        ></el-input>
+        <el-button
+          size="small"
+        >搜索
+        </el-button>
+      </div>
+      <el-button
+        size="small"
+        type="primary"
+        @click="openDialog('','add')"
+      >新增
+      </el-button>
+    </div>
     <el-table
       :data="userList"
       size="small"
@@ -66,7 +86,13 @@
         label="操作">
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="编辑" placement="left">
-            <el-button size="mini" icon="el-icon-edit" circle type="primary" plain></el-button>
+            <el-button
+              size="mini"
+              icon="el-icon-edit"
+              circle type="primary"
+              plain
+              @click="openDialog(scope.row,'edit')"
+            ></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="冻结" placement="top">
             <el-button size="mini" icon="el-icon-delete" circle type="danger" plain></el-button>
@@ -74,10 +100,12 @@
         </template>
       </el-table-column>
     </el-table>
+    <comp-dialog ref="compDialog" :dialogInfo="dialogInfo"></comp-dialog>
   </div>
 </template>
 
 <script>
+import CompDialog from './dialog'
 
 export default {
   data () {
@@ -87,6 +115,10 @@ export default {
       },
       headerCellStyle: {
         backgroundColor: '#d7d7d7'
+      },
+      dialogInfo: {
+        dialogTitle: '',
+        userItem: {}
       }
     }
   },
@@ -97,6 +129,39 @@ export default {
     loading: {
       type: Boolean
     }
+  },
+  components: {
+    CompDialog
+  },
+  methods: {
+    openDialog (row, type) {
+      if (type === 'edit') {
+        this.dialogInfo.dialogTitle = '修改用户信息'
+        this.dialogInfo.userItem = row
+        this.$nextTick(() => {
+          this.$refs.compDialog.openDialog()
+        })
+      }
+      if (type === 'add') {
+        this.dialogInfo.dialogTitle = '新增'
+        this.dialogInfo.userItem = {}
+        this.$nextTick(() => {
+          this.$refs.compDialog.openDialog()
+        })
+      }
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .user-filter {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    .query-input {
+      width: 150px;
+      margin-right: 6px
+    }
+  }
+</style>

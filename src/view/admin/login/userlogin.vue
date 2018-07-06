@@ -42,6 +42,7 @@
 <script>
 import { randomLenNum } from '@/tools/utiltools'
 import {mapGetters} from 'vuex'
+import {Msg} from '@/tools/message'
 
 export default {
   name: 'userlogin',
@@ -96,6 +97,10 @@ export default {
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.$store.dispatch('SetPageState', this.defaultHomePage)
             this.$router.push({path: this.defaultHomePage.path})
+          }).catch(err => {
+            console.log(err)
+            Msg.error('验证码错误')
+            this.refreshCode()
           })
         }
       })
