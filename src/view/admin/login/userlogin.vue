@@ -49,9 +49,9 @@ export default {
   data () {
     return {
       loginForm: {
-        loginStr: '123456',
+        loginStr: 'zhangyp',
         password: '123456',
-        captcha: 'qwee',
+        captcha: '',
         remember: false
       },
       code: {
@@ -84,7 +84,10 @@ export default {
   methods: {
     refreshCode () {
       let randomStr = randomLenNum(this.code.len, true)
+      // 开发环境
       this.code.src = `${process.env.BASE_API}/api/admin/tool/captcha?randomStr=${randomStr}`
+      // 生产环境
+      // this.code.src = `/api/admin/tool/captcha?randomStr=${randomStr}`
     },
     showPassword () {
       this.passwordType === ''

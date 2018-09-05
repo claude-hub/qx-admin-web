@@ -5,11 +5,11 @@ Vue.use(Router)
 
 const router = new Router({
   routes: [
-    {
-      path: '/',
-      name: 'clinetindex',
-      component: () => import('../view/client/home/index'),
-    },
+    // {
+    //   path: '/',
+    //   name: 'clinetindex',
+    //   component: () => import('../view/client/home/index'),
+    // },
     {
       path: '/admin',
       component: () => import('../view/admin/layout/index'),
@@ -51,8 +51,13 @@ const router = new Router({
         }
       ]
     },
+    // {
+    //   path: '/admin/login',
+    //   name: 'login',
+    //   component: () => import('../view/admin/login/index')
+    // }
     {
-      path: '/admin/login',
+      path: '/',
       name: 'login',
       component: () => import('../view/admin/login/index')
     }

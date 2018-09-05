@@ -8,6 +8,6 @@ export class UserApi {
     return server.post('/admin/auth/sign_in', params)
   }
   static getUserList(params) {
-    return server.get('/admin/SysUser/query', params)
+    return server.get('/admin/sysUser/query', params)
   }
 }

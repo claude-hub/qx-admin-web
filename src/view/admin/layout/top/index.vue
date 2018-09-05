@@ -70,7 +70,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('LogOut').then(() => {
-          this.$router.push({path: '/admin/login'})
+          this.$router.push({path: '/'})
         })
       })
     }
