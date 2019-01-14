@@ -49,7 +49,7 @@ export default {
   data () {
     return {
       loginForm: {
-        loginStr: 'zhangyp',
+        loginStr: 'admin',
         password: '123456',
         captcha: '',
         remember: false
@@ -84,10 +84,7 @@ export default {
   methods: {
     refreshCode () {
       let randomStr = randomLenNum(this.code.len, true)
-      // 开发环境
       this.code.src = `${process.env.BASE_API}/api/admin/tool/captcha?randomStr=${randomStr}`
-      // 生产环境
-      // this.code.src = `/api/admin/tool/captcha?randomStr=${randomStr}`
     },
     showPassword () {
       this.passwordType === ''

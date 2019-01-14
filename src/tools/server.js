@@ -3,8 +3,7 @@ import router from '@/router'
 import {store} from '@/store'
 
 export const server = axios.create({
-  baseURL: `${process.env.BASE_API}/api`, //开发环境
-  // baseURL: `/api`, //生产环境
+  baseURL: `${process.env.BASE_API}/api`,
   timeout: 1000 * 30,
   withCredentials: true,
 })
