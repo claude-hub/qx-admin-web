@@ -52,9 +52,10 @@ const user = {
     LoginByUsername({commit}, params) {
       return new Promise((resolve, reject) => {
         UserApi.login(params).then((res) => {
-          commit('SET_TOKEN', res.data.data.currentToken)
-          commit('SET_USER_INFO', res.data.data)
-          commit('SET_PERMISSIONS', res.data.data.menus)
+          const data = res.data.data
+          commit('SET_TOKEN', data.currentToken)
+          commit('SET_USER_INFO', data)
+          commit('SET_PERMISSIONS', data.permissions)
           resolve()
         }).catch(err => {
           Msg.error(err)

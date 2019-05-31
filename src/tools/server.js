@@ -3,16 +3,16 @@ import router from '@/router'
 import {store} from '@/store'
 
 export const server = axios.create({
-  baseURL: `${process.env.BASE_API}/api`,
+  // baseURL: `${process.env.BASE_API}/api`,
   timeout: 1000 * 30,
-  withCredentials: true,
+  withCredentials: true
 })
 
 /**
  * 请求拦截
  */
 server.interceptors.request.use(config => {
-  const {token} = store.getters;
+  const {token} = store.getters
   if (token != null) {
     config.headers['Authorization'] = token
   }

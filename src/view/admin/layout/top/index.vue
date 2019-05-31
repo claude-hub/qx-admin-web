@@ -4,7 +4,7 @@
       <div class="container">
         <div class="left-menu">
           <div class="tags-breadcrumb" :class="[{ 'tag-collapse_right': isCollapse }]">
-            <i class="iconfont icon-menu" @click="showCollapse"></i>
+            <i class="iconfont iconmenu" @click="showCollapse"></i>
           </div>
           <div :class="{'is-active' : currentPage.path == defaultHomePage.path}" class="menu-item" @click="OpenPage">首页</div>
           <div class="menu-item">文档</div>
@@ -12,7 +12,7 @@
         <div class="top-operate">
           <el-tooltip class="item-operate" effect="dark" :content="isFullScreen?'退出全屏':'全屏'" placement="bottom">
             <span class="top-item">
-            <i class="iconfont" :class="isFullScreen?'icon-tuichuquanping':'icon-quanping'" @click="handleScreen"></i>
+            <i class="iconfont" :class="isFullScreen?'icontuichuquanping':'iconquanping'" @click="handleScreen"></i>
           </span>
           </el-tooltip>
           <el-dropdown>
@@ -81,6 +81,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .iconmenu {
+    font-size: 32px;
+    margin-right: 10px;
+  }
   .top-container {
     position: absolute;
     top: 0;
@@ -101,7 +105,7 @@ export default {
       height: 64px;
       .left-menu {
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         line-height: 64px;
         .menu-item {
           padding: 0 20px;

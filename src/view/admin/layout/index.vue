@@ -35,7 +35,7 @@ export default {
     background: #fff;
     overflow: hidden;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     .left {
       width: 230px;
     }

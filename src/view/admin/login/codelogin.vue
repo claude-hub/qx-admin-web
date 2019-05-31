@@ -2,7 +2,7 @@
   <el-form class="login-form" status-icon :rules="loginRules" ref="loginForm" :model="loginForm" label-width="0">
     <el-form-item prop="mobile">
       <el-input size="small" v-model="loginForm.mobile" auto-complete="off" placeholder="手机号码">
-        <i slot="prefix" class="iconfont icon-shouji"></i>
+        <i slot="prefix" class="iconfont iconshouji"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="code">
@@ -12,7 +12,7 @@
             <!--<template slot="append">-->
             <!--<span class="msg-text">发送验证码</span>-->
             <!--</template>-->
-            <i slot="prefix" class="iconfont icon-yanzhengma" style="margin-top:10px;"></i>
+            <i slot="prefix" class="iconfont iconyanzhengma" style="margin-top:10px;"></i>
           </el-input>
         </el-col>
         <el-col :span="10">

@@ -3,14 +3,14 @@
     <el-form-item prop="loginStr">
       <el-input size="small" @keyup.enter.native="handleLogin" v-model="loginForm.loginStr" auto-complete="off"
                 placeholder="用户名 | 邮箱 | 手机号">
-        <i slot="prefix" class="iconfont icon-user"></i>
+        <i slot="prefix" class="iconfont iconuser"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input size="small" @keyup.enter.native="handleLogin" :type="passwordType" v-model="loginForm.password"
                 auto-complete="off" placeholder="密码">
-        <i class="iconfont icon-eye" slot="suffix" @click="showPassword"></i>
-        <i slot="prefix" class="iconfont icon-password"></i>
+        <i class="iconfont iconeye" slot="suffix" @click="showPassword"></i>
+        <i slot="prefix" class="iconfont iconpassword"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="captcha">
@@ -22,7 +22,7 @@
             :maxlength="code.len"
             v-model="loginForm.captcha"
             auto-complete="off" placeholder="请输入验证码">
-            <i slot="prefix" class="iconfont icon-yanzhengma"></i>
+            <i slot="prefix" class="iconfont iconyanzhengma"></i>
           </el-input>
         </el-col>
         <el-col :span="12">
@@ -34,7 +34,7 @@
     </el-form-item>
     <el-checkbox v-model="loginForm.remember">记住账号</el-checkbox>
     <el-form-item>
-      <el-button type="primary" size="small" @click.native.prevent="handleLogin" class="login-submit">登录</el-button>
+      <el-button type="primary" :loading="loading" size="small" @click.native.prevent="handleLogin" class="login-submit">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -49,9 +49,10 @@ export default {
   data () {
     return {
       loginForm: {
-        loginStr: 'admin',
+        loginStr: '15223246130',
         password: '123456',
         captcha: '',
+        randomStr: '',
         remember: false
       },
       code: {
@@ -59,6 +60,7 @@ export default {
         len: 4,
         type: 'text'
       },
+      loading: false,
       loginRules: {
         loginStr: [
           {required: true, message: '请输入账号', trigger: 'blur'}
@@ -83,8 +85,8 @@ export default {
   },
   methods: {
     refreshCode () {
-      let randomStr = randomLenNum(this.code.len, true)
-      this.code.src = `${process.env.BASE_API}/api/admin/tool/captcha?randomStr=${randomStr}`
+      this.loginForm.randomStr = randomLenNum(this.code.len, true)
+      this.code.src = `${window.location.origin}/captcha?randomStr=${this.loginForm.randomStr}`
     },
     showPassword () {
       this.passwordType === ''
@@ -94,12 +96,15 @@ export default {
     handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          this.loading = true
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            this.loading = false
             this.$store.dispatch('SetPageState', this.defaultHomePage)
             this.$router.push({path: this.defaultHomePage.path})
           }).catch(err => {
             console.log(err)
-            Msg.error('验证码错误')
+            this.loading = false
+            // Msg.error('验证码错误')
             this.refreshCode()
           })
         }
@@ -110,7 +115,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .icon-eye {
+  .iconeye {
     cursor: pointer;
   }
 </style>

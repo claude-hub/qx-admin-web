@@ -3,10 +3,13 @@
     <div class="background">
       <div class="login-container" @keyup.enter.native="handleLogin">
         <div class="login-info text-white animated fadeInLeft">
-          <h2 class="login-info-title">千寻---通用web系统---后台登录</h2>
+          <h2 class="login-info-title">千寻---通用web框架</h2>
           <ul class="login-info-list">
             <li class="login-info-item">
-              <i class="el-icon-check"></i>&nbsp;是一个基于Spring Boot、spring security开发基于Vue前后分离的开发平台
+              <i class="el-icon-check"></i>&nbsp;是一个基于微服务架构、基于RPC协议的通用web框架
+            </li>
+            <li class="login-info-item">
+              <i class="el-icon-check"></i>&nbsp;是一个基于Spring Cloud、spring security、GRPC、前后端分离的开发平台
             </li>
             <li class="login-info-item">
               <i class="el-icon-check"></i>&nbsp;是一个基于vue+vuex+vue-router快速后台管理系统，采用token交互验证方式。
@@ -28,17 +31,12 @@
               <el-tab-pane label="账号密码" name="user">
                 <userLogin></userLogin>
               </el-tab-pane>
-              <el-tab-pane label="短信验证码" name="code">
-                <codeLogin></codeLogin>
-              </el-tab-pane>
+              <!--<el-tab-pane label="短信验证码" name="code">-->
+                <!--<codeLogin></codeLogin>-->
+              <!--</el-tab-pane>-->
             </el-tabs>
           </div>
         </div>
-      </div>
-      <div class="bottom-block">
-        <span>@cloudyslife.cn</span>
-        <a target="_blank" href="http://www.miitbeian.gov.cn"> 渝ICP备17009677号-1 </a>
-        <span>邮箱: 314705487@qq.com</span>
       </div>
     </div>
   </div>
@@ -76,14 +74,6 @@ export default {
     .background {
         background: rgba(0,0,0,.3);
         height: 100%;
-        .bottom-block {
-          width: 100%;
-          text-align: center;
-          position: fixed;
-          bottom: 20px;
-          font-size: 14px;
-          color: #fff;
-        }
     }
     .login-container {
       display: flex;

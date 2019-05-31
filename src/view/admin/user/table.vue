@@ -4,12 +4,15 @@
       <div class="query">
         <el-input
           clearable
+          v-model="query"
           size="small"
           placeholder="用户信息"
           class="query-input"
+          @keyup.enter.native="handleSearch"
         ></el-input>
         <el-button
           size="small"
+          @click="handleSearch"
         >搜索
         </el-button>
       </div>
@@ -21,7 +24,7 @@
       </el-button>
     </div>
     <el-table
-      :data="userList"
+      :data="tableData.data"
       size="small"
       v-loading=loading
       :header-row-style="headerRowStyle"
@@ -30,7 +33,7 @@
       border
       style="width: 100%">
       <el-table-column
-        prop="userId"
+        prop="id"
         width="50"
         label="序号">
       </el-table-column>
@@ -61,9 +64,9 @@
         label="邮箱">
       </el-table-column>
       <el-table-column
-        prop="avatar"
-        width="120"
-        label="头像">
+        prop="createdAt"
+        width="140"
+        label="创建时间">
       </el-table-column>
       <el-table-column
         prop="signInCount"
@@ -100,16 +103,29 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      style="text-align: right;margin-top: 20px;color: #606266"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[1,2, 5, 8, 10]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.totalCount">
+    </el-pagination>
     <comp-dialog ref="compDialog" :dialogInfo="dialogInfo"></comp-dialog>
   </div>
 </template>
 
 <script>
 import CompDialog from './dialog'
+import { UserApi } from '@/api/user'
+import { Msg } from '@/tools/message'
 
 export default {
   data () {
     return {
+      query: '',
       headerRowStyle: {
         color: '#909399'
       },
@@ -119,21 +135,44 @@ export default {
       dialogInfo: {
         dialogTitle: '',
         userItem: {}
-      }
+      },
+      loading: false,
+      tableData: {},
+      currentPage: 1,
+      pageSize: 1
     }
   },
-  props: {
-    userList: {
-      type: Array
-    },
-    loading: {
-      type: Boolean
-    }
-  },
+  // props: {
+  //   tableData: {
+  //     type: Object
+  //   },
+  //   loading: {
+  //     type: Boolean
+  //   }
+  // },
   components: {
     CompDialog
   },
+  mounted () {
+    this.loadData()
+  },
   methods: {
+    loadData () {
+      this.loading = true
+      let params = {
+        query: this.query,
+        page: this.currentPage,
+        pageSize: this.pageSize
+      }
+      UserApi.getUserList(params).then((res) => {
+        this.loading = false
+        this.tableData = res.data
+      }).catch((err) => {
+        console.log(err)
+        Msg.error('请求失败!')
+        this.loading = false
+      })
+    },
     openDialog (row, type) {
       if (type === 'edit') {
         this.dialogInfo.dialogTitle = '修改用户信息'
@@ -149,6 +188,17 @@ export default {
           this.$refs.compDialog.openDialog()
         })
       }
+    },
+    handleSearch () {
+      this.loadData()
+    },
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.loadData()
+    },
+    handleCurrentChange (val) {
+      this.currentPage = val
+      this.loadData()
     }
   }
 }

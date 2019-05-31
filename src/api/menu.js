@@ -5,6 +5,6 @@ import {server} from '@/tools/server'
  */
 export class MenuApi {
   static userMenu(params) {
-    return server.get('/admin/auth/menu', params)
+    return server.get('/admin/sysMenu/userMenus', params)
   }
 }

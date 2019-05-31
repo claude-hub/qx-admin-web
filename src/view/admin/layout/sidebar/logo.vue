@@ -8,7 +8,7 @@
     <transition-group name="fade">
       <template v-if="!isCollapse">
         <span class="logo_title is-bold" key="1"> 千寻 </span>
-        <span class="logo_subtitle" key="2">快速开发脚手架</span>
+        <span class="logo_subtitle" key="2">通用web框架</span>
       </template>
     </transition-group>
   </div>
