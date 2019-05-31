@@ -10,7 +10,9 @@ import './permission'
 /** 生产提示关闭 */
 Vue.config.productionTip = false
 /** 注册 element 组件 */
-Vue.use(ElementUI)
+Vue.use(ElementUI, {
+  size: 'small' // medium / small / mini
+})
 
 new Vue({
   router,

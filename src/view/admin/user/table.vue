@@ -5,7 +5,6 @@
         <el-input
           clearable
           v-model="query"
-          size="small"
           placeholder="用户信息"
           class="query-input"
           @keyup.enter.native="handleSearch"
@@ -17,7 +16,7 @@
         </el-button>
       </div>
       <el-button
-        size="small"
+        v-if="sys_user_add"
         type="primary"
         @click="openDialog('','add')"
       >新增
@@ -97,7 +96,7 @@
               @click="openDialog(scope.row,'edit')"
             ></el-button>
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="冻结" placement="top">
+          <el-tooltip class="item" effect="dark" content="删除" placement="top">
             <el-button size="mini" icon="el-icon-delete" circle type="danger" plain></el-button>
           </el-tooltip>
         </template>
@@ -113,16 +112,71 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.totalCount">
     </el-pagination>
-    <comp-dialog ref="compDialog" :dialogInfo="dialogInfo"></comp-dialog>
+    <el-dialog
+      :title="dialogInfo.dialogTitle"
+      :visible.sync="dialogVisible"
+      width="40%">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="ruleForm.userName" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="重置密码" prop="password">
+          <el-input v-model="ruleForm.password" placeholder="请输入重置的密码"></el-input>
+        </el-form-item>
+
+        <el-dialog
+          width="30%"
+          title="请选择"
+          :visible.sync="innerVisible"
+          append-to-body>
+          <el-input
+            placeholder="输入关键字进行过滤"
+            style="margin-bottom: 20px"
+            v-model="filterText">
+          </el-input>
+          <el-tree
+            style="margin-bottom: 30px"
+            class="filter-tree"
+            :data="deptTree"
+            :props="defaultProps"
+            default-expand-all
+            :filter-node-method="filterNode"
+            @node-click="selectDept"
+            ref="tree">
+          </el-tree>
+        </el-dialog>
+
+        <el-form-item label="所属部门" prop="deptName">
+          <el-input
+            @focus="showDeptTree"
+            v-model="ruleForm.deptName"
+            placeholder="请选择所属部门"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import CompDialog from './dialog'
 import { UserApi } from '@/api/user'
+import { DeptApi } from '@/api/dept'
 import { Msg } from '@/tools/message'
+import { mapGetters } from 'vuex'
 
 export default {
+  created () {
+    this.sys_user_add = this.permissions.includes('sys_user_add')
+    this.sys_user_edit = this.permissions.includes('sys_user_edit')
+    this.sys_user_del = this.permissions.includes('sys_user_del')
+  },
+  computed: {
+    ...mapGetters(['permissions'])
+  },
   data () {
     return {
       query: '',
@@ -139,22 +193,39 @@ export default {
       loading: false,
       tableData: {},
       currentPage: 1,
-      pageSize: 1
+      pageSize: 1,
+      dialogVisible: false,
+      innerVisible: false,
+      ruleForm: {
+        userName: '',
+        password: '',
+        deptId: '',
+        deptName: ''
+      },
+      rules: {
+        userName: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        deptName: [
+          { required: true, message: '请选择部门', trigger: 'blur' }
+        ]
+      },
+
+      filterText: '',
+      deptTree: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      }
     }
-  },
-  // props: {
-  //   tableData: {
-  //     type: Object
-  //   },
-  //   loading: {
-  //     type: Boolean
-  //   }
-  // },
-  components: {
-    CompDialog
   },
   mounted () {
     this.loadData()
+  },
+  watch: {
+    filterText (val) {
+      this.$refs.tree.filter(val)
+    }
   },
   methods: {
     loadData () {
@@ -169,26 +240,24 @@ export default {
         this.tableData = res.data
       }).catch((err) => {
         console.log(err)
-        Msg.error('请求失败!')
+        Msg.error('请求数据失败!')
         this.loading = false
       })
     },
     openDialog (row, type) {
+      this.dialogVisible = true
       if (type === 'edit') {
-        this.dialogInfo.dialogTitle = '修改用户信息'
+        this.dialogInfo.dialogTitle = '编辑'
         this.dialogInfo.userItem = row
-        this.$nextTick(() => {
-          this.$refs.compDialog.openDialog()
-        })
       }
       if (type === 'add') {
         this.dialogInfo.dialogTitle = '新增'
         this.dialogInfo.userItem = {}
-        this.$nextTick(() => {
-          this.$refs.compDialog.openDialog()
-        })
       }
     },
+    // closeDialog () {
+    //   this.dialogVisible = false
+    // },
     handleSearch () {
       this.loadData()
     },
@@ -199,6 +268,25 @@ export default {
     handleCurrentChange (val) {
       this.currentPage = val
       this.loadData()
+    },
+    showDeptTree (e) {
+      DeptApi.deptTree().then(res => {
+        this.deptTree = res.data.data
+        this.innerVisible = true
+      }).catch(err => {
+        console.log(err)
+        Msg.error('请求数据失败!')
+      })
+    },
+    filterNode (value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
+    selectDept (dept) {
+      console.log(dept)
+      this.innerVisible = false
+      this.ruleForm.deptId = dept.id
+      this.ruleForm.deptName = dept.name
     }
   }
 }

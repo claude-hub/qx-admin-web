@@ -17,7 +17,6 @@
       <el-row :span="24">
         <el-col :span="12">
           <el-input
-            size="small"
             @keyup.enter.native="handleLogin"
             :maxlength="code.len"
             v-model="loginForm.captcha"
@@ -41,8 +40,8 @@
 
 <script>
 import { randomLenNum } from '@/tools/utiltools'
-import {mapGetters} from 'vuex'
-import {Msg} from '@/tools/message'
+import { mapGetters } from 'vuex'
+import { Msg } from '@/tools/message'
 
 export default {
   name: 'userlogin',
@@ -63,15 +62,15 @@ export default {
       loading: false,
       loginRules: {
         loginStr: [
-          {required: true, message: '请输入账号', trigger: 'blur'}
+          { required: true, message: '请输入账号', trigger: 'blur' }
         ],
         password: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-          {min: 6, message: '密码长度最少为6位', trigger: 'blur'}
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '密码长度最少为6位', trigger: 'blur' }
         ],
         captcha: [
-          {required: true, message: '请输入验证码', trigger: 'blur'},
-          {min: 4, max: 4, message: '验证码长度为4位', trigger: 'blur'}
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { min: 4, max: 4, message: '验证码长度为4位', trigger: 'blur' }
         ]
       },
       passwordType: 'password'
@@ -100,7 +99,7 @@ export default {
           this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
             this.loading = false
             this.$store.dispatch('SetPageState', this.defaultHomePage)
-            this.$router.push({path: this.defaultHomePage.path})
+            this.$router.push({ path: this.defaultHomePage.path })
           }).catch(err => {
             console.log(err)
             this.loading = false

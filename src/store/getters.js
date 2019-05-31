@@ -3,6 +3,8 @@ export const getters = {
   isLogin: state => state.user.isLogin,
   token: state => state.user.token,
   userMenu: state => state.user.userMenu,
+  permissions: state => state.user.permissions,
+
   isCollapse: state => state.common.isCollapse,
   isFullScreen: state => state.common.isFullScreen,
   isLock: state => state.common.isLock,
@@ -11,4 +13,4 @@ export const getters = {
   defaultHomePage: state => state.common.defaultHomePage,
   openedPages: state => state.page.openedPages,
   currentPage: state => state.page.currentPage,
-};
+}
