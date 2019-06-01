@@ -2,25 +2,34 @@
   <div>
     <div class="user-filter">
       <div class="query">
+        <span class="dept-tree">部门</span>
+        <tree-select :data="deptTree"
+                     :defaultProps="defaultProps"
+                     :nodeKey="nodeKey" :checkedKeys="searchDeptCheckedKeys"
+                     @popoverHide="popoverHide"></tree-select>
+
         <el-input
           clearable
           v-model="query"
           placeholder="用户信息"
           class="query-input"
+          style="width: 250px"
           @keyup.enter.native="handleSearch"
         ></el-input>
         <el-button
-          size="small"
           @click="handleSearch"
         >搜索
         </el-button>
       </div>
-      <el-button
-        v-if="sys_user_add"
-        type="primary"
-        @click="openDialog('','add')"
-      >新增
-      </el-button>
+      <div>
+        <el-button icon="el-icon-refresh" circle @click="reloadData"></el-button>
+        <el-button
+          v-if="sys_user_add"
+          type="primary"
+          @click="openDialog('','add')"
+        >新增
+        </el-button>
+      </div>
     </div>
     <el-table
       :data="tableData.data"
@@ -40,28 +49,33 @@
         <!--prop="name"-->
         <!--label="姓名">-->
       <!--</el-table-column>-->
-      <!--<el-table-column-->
-        <!--prop="deptId"-->
-        <!--label="部门">-->
-      <!--</el-table-column>-->
       <el-table-column
-        prop="roleName"
-        label="角色">
+        prop="deptName"
+        label="部门">
       </el-table-column>
-      <!--<el-table-column-->
-        <!--prop="userName"-->
-        <!--label="用户名">-->
-      <!--</el-table-column>-->
+      <el-table-column
+        prop="roles"
+        label="角色">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.roles" :key="item.id">
+            <el-tag>{{item.name}}</el-tag>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="userName"
+        label="用户名">
+      </el-table-column>
       <el-table-column
         prop="phone"
         width="100"
         label="电话号码">
       </el-table-column>
-      <!--<el-table-column-->
-        <!--prop="email"-->
-        <!--width="150"-->
-        <!--label="邮箱">-->
-      <!--</el-table-column>-->
+      <el-table-column
+        prop="email"
+        width="150"
+        label="邮箱">
+      </el-table-column>
       <el-table-column
         prop="createdAt"
         width="140"
@@ -75,6 +89,7 @@
       <el-table-column
         prop="status"
         align="center"
+        width="100"
         label="状态">
         <template slot-scope="scope">
           <el-button disabled size="mini" type="success" plain v-if="scope.row.locked == null">正常</el-button>
@@ -114,6 +129,8 @@
       :total="tableData.totalCount">
     </el-pagination>
     <el-dialog
+      :close-on-click-modal="false"
+      :before-close="closeDialog"
       :title="dialogInfo.dialogTitle"
       :visible.sync="dialogVisible"
       top="10vh"
@@ -124,83 +141,88 @@
             v-model="ruleForm.phoneNum"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <!--<el-form-item label="用户名" prop="userName">-->
-          <!--<el-input v-model="ruleForm.userName" placeholder="请输入用户名"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="姓名" prop="name">-->
-          <!--<el-input v-model="ruleForm.name" placeholder="请输入姓名"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="邮箱" prop="email">-->
-          <!--<el-input v-model="ruleForm.email" placeholder="请输入邮箱"></el-input>-->
-        <!--</el-form-item>-->
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="ruleForm.userName" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="ruleForm.password" placeholder="密码"></el-input>
         </el-form-item>
 
-        <el-dialog
-          width="30%"
-          title="请选择部门"
-          :visible.sync="deptVisible"
-          append-to-body>
-          <el-input
-            placeholder="输入关键字进行过滤"
-            style="margin-bottom: 20px"
-            v-model="filterText">
-          </el-input>
-          <el-tree
-            style="margin-bottom: 30px"
-            :data="deptTree"
-            :props="defaultProps"
-            default-expand-all
-            :filter-node-method="filterNode"
-            @node-click="selectDept"
-            ref="tree">
-          </el-tree>
-        </el-dialog>
+        <!--<el-dialog-->
+          <!--width="30%"-->
+          <!--title="请选择部门"-->
+          <!--:visible.sync="deptVisible"-->
+          <!--append-to-body>-->
+          <!--<el-input-->
+            <!--placeholder="输入关键字进行过滤"-->
+            <!--style="margin-bottom: 20px"-->
+            <!--v-model="filterText">-->
+          <!--</el-input>-->
+          <!--<el-tree-->
+            <!--style="margin-bottom: 30px"-->
+            <!--:data="deptTree"-->
+            <!--:props="defaultProps"-->
+            <!--default-expand-all-->
+            <!--:filter-node-method="filterNode"-->
+            <!--@node-click="selectDept"-->
+            <!--ref="tree">-->
+          <!--</el-tree>-->
+        <!--</el-dialog>-->
 
-        <el-dialog
-          width="30%"
-          title="请选择员工的特殊权限"
-          :visible.sync="permissionVisible"
-          top="10vh"
-          append-to-body>
-          <el-input
-            placeholder="输入关键字进行过滤"
-            style="margin-bottom: 20px"
-            v-model="filterPermission">
-          </el-input>
-          <el-tree
-            :data="menuTree"
-            show-checkbox
-            default-expand-all
-            node-key="id"
-            ref="permissionTree"
-            :filter-node-method="filterNode"
-            highlight-current
-            :props="defaultProps">
-          </el-tree>
+        <!--<el-dialog-->
+          <!--width="30%"-->
+          <!--title="请选择员工的特殊权限"-->
+          <!--:visible.sync="permissionVisible"-->
+          <!--top="10vh"-->
+          <!--append-to-body>-->
+          <!--<el-input-->
+            <!--placeholder="输入关键字进行过滤"-->
+            <!--style="margin-bottom: 20px"-->
+            <!--v-model="filterPermission">-->
+          <!--</el-input>-->
+          <!--<el-tree-->
+            <!--:data="menuTree"-->
+            <!--show-checkbox-->
+            <!--default-expand-all-->
+            <!--node-key="id"-->
+            <!--ref="permissionTree"-->
+            <!--:filter-node-method="filterNode"-->
+            <!--highlight-current-->
+            <!--:props="defaultProps">-->
+          <!--</el-tree>-->
 
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="closePermission">取 消</el-button>
-              <el-button
-                type="primary"
-                :loading="btnLoading"
-                @click.native.prevent="handleSelectPerm"
-              >确 定</el-button>
-          </span>
+          <!--<span slot="footer" class="dialog-footer">-->
+            <!--<el-button @click="closePermission">取 消</el-button>-->
+              <!--<el-button-->
+                <!--type="primary"-->
+                <!--:loading="btnLoading"-->
+                <!--@click.native.prevent="handleSelectPerm"-->
+              <!--&gt;确 定</el-button>-->
+          <!--</span>-->
 
-        </el-dialog>
+        <!--</el-dialog>-->
 
-        <el-form-item label="所属部门" prop="deptName">
-          <el-input
-            @focus="showDeptTree"
-            v-model="ruleForm.deptName"
-            placeholder="请选择所属部门"></el-input>
+        <el-form-item label="所属部门" prop="deptId">
+          <!--<el-input-->
+            <!--@focus="showDeptTree"-->
+            <!--v-model="ruleForm.deptName"-->
+            <!--placeholder="请选择所属部门"></el-input>-->
+          <tree-select :data="deptTree"
+                       :defaultProps="defaultProps"
+                       :nodeKey="nodeKey" :checkedKeys="selectDeptCheckedKeys"
+                       @popoverHide="popoverSelectDept"></tree-select>
         </el-form-item>
+
+
         <el-form-item label="角色" prop="role">
           <el-select
             v-model="ruleForm.role"
-            @focus="getRoles"
             multiple
             collapse-tags
             placeholder="请选择角色">
@@ -214,10 +236,14 @@
         </el-form-item>
 
         <el-form-item label="特殊权限" prop="specialPerm">
-          <el-input
-            @focus="showPermissionTree"
-            v-model="ruleForm.specialPerm"
-            placeholder="请选择特殊权限"></el-input>
+          <!--<el-input-->
+            <!--@focus="showPermissionTree"-->
+            <!--v-model="ruleForm.specialPerm"-->
+            <!--placeholder="请选择特殊权限"></el-input>-->
+          <tree-select :data="menuTree" multiple
+                       :defaultProps="defaultProps"
+                       :nodeKey="nodeKey" :checkedKeys="selectPermCheckedKeys"
+                       @popoverHide="popoverSelectPrem"></tree-select>
         </el-form-item>
 
         <el-form-item label="状态" prop="locked">
@@ -236,7 +262,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="resetForm">重置</el-button>
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="closeDialogBtn">取 消</el-button>
           <el-button
             type="primary"
             :loading="btnLoading"
@@ -255,16 +281,23 @@ import { MenuApi } from '@/api/menu'
 import { isvalidatemobile } from '@/tools/validate'
 import { Msg } from '@/tools/message'
 import { mapGetters } from 'vuex'
+import TreeSelect from '@/components/tree-select.vue';
 
 export default {
   created () {
     this.sys_user_add = this.permissions.includes('sys_user_add')
     this.sys_user_edit = this.permissions.includes('sys_user_edit')
     this.sys_user_del = this.permissions.includes('sys_user_del')
+    this.showDeptTree()
+    this.getRoles()
+    MenuApi.menuTree().then(res => {
+      this.menuTree = res.data.data
+    })
   },
   computed: {
     ...mapGetters(['permissions'])
   },
+  components: { TreeSelect },
   data () {
     let validatePhone = (rule, value, callback) => {
       if (!isvalidatemobile(value)) {
@@ -275,6 +308,7 @@ export default {
     return {
       dialogType: '',
       query: '',
+      deptId: '',
       headerRowStyle: {
         color: '#909399'
       },
@@ -290,7 +324,7 @@ export default {
       currentPage: 1,
       pageSize: 5,
       dialogVisible: false,
-      deptVisible: false,
+      // deptVisible: false,
       permissionVisible: false,
       ruleForm: {
         userName: '',
@@ -302,8 +336,10 @@ export default {
         phoneNum: '',
         role: '',
         locked: '',
-        specialPerm: '', // 字符串数组逗号隔开
-        specialPermIds: []
+        // specialPerm: '', // 字符串数组逗号隔开
+        specialPermIds: [],
+        updatedAt: '', //上此更新的时间
+        id: '' //主键id
       },
       rules: {
         // userName: [
@@ -318,19 +354,23 @@ export default {
         ],
         locked: [
           { required: true, message: '请选择状态', trigger: 'blur' }
+        ],
+        deptId: [
+          { required: true, message: '请选择部门', trigger: 'blur' }
         ]
-        // deptName: [
-        //   { required: true, message: '请选择部门', trigger: 'blur' }
-        // ]
       },
 
-      filterText: '',
+      // filterText: '',
       filterPermission: '',
       deptTree: [],
       defaultProps: {
         children: 'children',
         label: 'label'
       },
+      nodeKey: 'id',
+      searchDeptCheckedKeys: [], //部门默认选中的key
+      selectDeptCheckedKeys: [], //新增修改用户时，选择部门的key
+      selectPermCheckedKeys: [], //新增修改用户时，选择的特殊权限
       roles: [],
       btnLoading: false,
       status: [{
@@ -347,27 +387,44 @@ export default {
     this.loadData()
   },
   watch: {
-    filterText (val) {
-      this.$refs.tree.filter(val)
-    },
+    // filterText (val) {
+    //   this.$refs.tree.filter(val)
+    // },
     filterPermission (val) {
       this.$refs.permissionTree.filter(val)
     }
   },
   methods: {
+    popoverHide (checkedIds) {
+      this.deptId = checkedIds
+      this.loadData()
+    },
+    popoverSelectDept (checkedIds) {
+      this.ruleForm.deptId = checkedIds
+    },
+    popoverSelectPrem (checkedIds) {
+      this.ruleForm.specialPermIds = checkedIds
+    },
+    reloadData () {
+      this.deptId = ''
+      this.searchDeptCheckedKeys = []
+      this.query = ''
+      this.loadData()
+    },
     loadData () {
       this.loading = true
       let params = {
         query: this.query,
         page: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        deptId: this.deptId
       }
       UserApi.getUserList(params).then((res) => {
         this.loading = false
         this.tableData = res.data
       }).catch((err) => {
         console.log(err)
-        Msg.error('请求数据失败!')
+        // Msg.error('请求数据失败!')
         this.loading = false
       })
     },
@@ -383,10 +440,17 @@ export default {
         this.ruleForm.name = row.name
         this.ruleForm.email = row.email
         this.ruleForm.password = row.passwordEncrypted
-        this.ruleForm.role = row.role
-        this.ruleForm.specialPermIds = row.specialPermIds
+        this.ruleForm.role = row.roles.map(item=>item.id)
+        // 特殊权限的id
+        this.ruleForm.specialPermIds = row.menus.map(item=>item.id)
+        this.selectPermCheckedKeys = row.menus.map(item=>item.id)
         this.ruleForm.deptId = row.deptId
+        let depts = []
+        depts.push(row.deptId)
+        this.selectDeptCheckedKeys = depts
         this.ruleForm.locked = row.locked || 0
+        this.ruleForm.updatedAt = row.updatedAt
+        this.ruleForm.id = row.id
       }
       if (type === 'add') {
         this.dialogInfo.dialogTitle = '新增'
@@ -404,58 +468,60 @@ export default {
       this.currentPage = val
       this.loadData()
     },
-    showDeptTree (e) {
+    showDeptTree () {
       DeptApi.deptTree().then(res => {
         this.deptTree = res.data.data
-        this.deptVisible = true
+        // this.deptVisible = true
       }).catch(err => {
         console.log(err)
-        Msg.error('请求数据失败!')
+        // Msg.error('请求数据失败!')
       })
     },
     filterNode (value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
-    selectDept (dept) {
-      this.deptVisible = false
-      this.ruleForm.deptId = dept.id
-      this.ruleForm.deptName = dept.name
-    },
+    // selectDept (dept) {
+    //   this.deptVisible = false
+    //   this.ruleForm.deptId = dept.id
+    //   this.ruleForm.deptName = dept.name
+    // },
     getRoles () {
       RoleApi.roles().then(res => {
         this.roles = res.data.data
       }).catch(err => {
         console.log(err)
-        Msg.error('请求数据失败!')
+        // Msg.error('请求数据失败!')
       })
     },
-    showPermissionTree () {
-      MenuApi.menuTree().then(res => {
-        this.menuTree = res.data.data
-        this.permissionVisible = true
-      }).catch(err => {
-        console.log(err)
-        Msg.error('请求数据失败!')
-      })
-    },
-    closePermission () {
-      this.filterPermission = ''
-      this.permissionVisible = false
-    },
-    handleSelectPerm () {
-      this.permissionVisible = false
-      let selected = this.$refs.permissionTree.getCheckedNodes().map(item => {
-        return {
-          id: item.id,
-          name: item.name
-        }
-      })
-      this.ruleForm.specialPermIds = selected.map(item => item.id)
-      this.ruleForm.specialPerm = selected.map(item => item.name).toString()
-    },
+    // showPermissionTree () {
+    //   MenuApi.menuTree().then(res => {
+    //     this.menuTree = res.data.data
+    //     this.permissionVisible = true
+    //   }).catch(err => {
+    //     console.log(err)
+    //     // Msg.error('请求数据失败!')
+    //   })
+    // },
+    // closePermission () {
+    //   this.filterPermission = ''
+    //   this.permissionVisible = false
+    // },
+    // handleSelectPerm () {
+    //   this.permissionVisible = false
+    //   let selected = this.$refs.permissionTree.getCheckedNodes().map(item => {
+    //     return {
+    //       id: item.id,
+    //       name: item.name
+    //     }
+    //   })
+    //   this.ruleForm.specialPermIds = selected.map(item => item.id)
+    //   this.ruleForm.specialPerm = selected.map(item => item.name).toString()
+    // },
     resetForm () {
       this.$refs.ruleForm.resetFields()
+      this.selectPermCheckedKeys = []
+      this.selectDeptCheckedKeys = []
     },
     handleSubmit () {
       this.$refs.ruleForm.validate(valid => {
@@ -473,6 +539,8 @@ export default {
             locked: this.ruleForm.locked
           }
           if(this.dialogType === 'edit'){
+            params.id = this.ruleForm.id
+            params.updatedAt = this.ruleForm.updatedAt
             UserApi.editUser(params).then(res => {
               this.btnLoading = false
               this.dialogVisible = false
@@ -512,6 +580,14 @@ export default {
         }
       })
     },
+    closeDialog (done) {
+      done()
+      this.resetForm()
+    },
+    closeDialogBtn () {
+      this.dialogVisible = false
+      this.resetForm()
+    },
     deleteUser (id) {
       this.$confirm('此操作将删除该用户, 是否继续?', '警告', {
         confirmButtonText: '确定',
@@ -536,9 +612,19 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    .query {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      .dept-tree {
+        margin-right: 6px;
+        font-size: 13px;
+        color: #909399;
+      }
+    }
     .query-input {
       width: 150px;
-      margin-right: 6px
+      margin: 0 6px 0 20px;
     }
   }
 </style>
