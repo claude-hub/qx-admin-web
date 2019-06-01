@@ -101,9 +101,8 @@ export default {
             this.$store.dispatch('SetPageState', this.defaultHomePage)
             this.$router.push({ path: this.defaultHomePage.path })
           }).catch(err => {
-            console.log(err)
             this.loading = false
-            // Msg.error('验证码错误')
+            Msg.error(err.response.data.message)
             this.refreshCode()
           })
         }

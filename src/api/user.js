@@ -1,4 +1,5 @@
 import { server } from '@/tools/server'
+import qs from 'qs'
 
 /**
  * 用户api接口
@@ -17,5 +18,14 @@ export class UserApi {
       method: 'get',
       params: params
     })
+  }
+  static addUser (params) {
+    return server.post('/admin/sysUser/add', qs.stringify(params, { indices: false }))
+  }
+  static delUser (id) {
+    return server.delete(`/admin/sysUser/delete`, id)
+  }
+  static editUser (params) {
+    return server.put('/admin/sysUser/update', qs.stringify(params, { indices: false }))
   }
 }

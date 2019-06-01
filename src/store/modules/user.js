@@ -58,7 +58,6 @@ const user = {
           commit('SET_PERMISSIONS', data.permissions)
           resolve()
         }).catch(err => {
-          Msg.error(err)
           reject(err)
         })
       })

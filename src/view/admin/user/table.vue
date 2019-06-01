@@ -36,32 +36,32 @@
         width="50"
         label="序号">
       </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="name"-->
+        <!--label="姓名">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+        <!--prop="deptId"-->
+        <!--label="部门">-->
+      <!--</el-table-column>-->
       <el-table-column
-        prop="name"
-        label="姓名">
-      </el-table-column>
-      <el-table-column
-        prop="deptId"
-        label="部门">
-      </el-table-column>
-      <el-table-column
-        prop="userName"
+        prop="roleName"
         label="角色">
       </el-table-column>
-      <el-table-column
-        prop="userName"
-        label="用户名">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="userName"-->
+        <!--label="用户名">-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="phone"
         width="100"
         label="电话号码">
       </el-table-column>
-      <el-table-column
-        prop="email"
-        width="150"
-        label="邮箱">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="email"-->
+        <!--width="150"-->
+        <!--label="邮箱">-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="createdAt"
         width="140"
@@ -77,7 +77,7 @@
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <el-button disabled size="mini" type="success" plain v-if="scope.row.status == null">正常</el-button>
+          <el-button disabled size="mini" type="success" plain v-if="scope.row.locked == null">正常</el-button>
           <el-button disabled size="mini" type="danger" plain v-else>冻结</el-button>
         </template>
       </el-table-column>
@@ -97,12 +97,13 @@
             ></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button size="mini" icon="el-icon-delete" circle type="danger" plain></el-button>
+            <el-button size="mini" icon="el-icon-delete" circle type="danger" plain @click="deleteUser(scope.row.id)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
+      background
       style="text-align: right;margin-top: 20px;color: #606266"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -115,19 +116,31 @@
     <el-dialog
       :title="dialogInfo.dialogTitle"
       :visible.sync="dialogVisible"
+      top="10vh"
       width="40%">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="ruleForm.userName" placeholder="请输入用户名"></el-input>
+        <el-form-item label="手机号" prop="phoneNum">
+          <el-input
+            v-model="ruleForm.phoneNum"
+            placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="重置密码" prop="password">
-          <el-input v-model="ruleForm.password" placeholder="请输入重置的密码"></el-input>
+        <!--<el-form-item label="用户名" prop="userName">-->
+          <!--<el-input v-model="ruleForm.userName" placeholder="请输入用户名"></el-input>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="姓名" prop="name">-->
+          <!--<el-input v-model="ruleForm.name" placeholder="请输入姓名"></el-input>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="邮箱" prop="email">-->
+          <!--<el-input v-model="ruleForm.email" placeholder="请输入邮箱"></el-input>-->
+        <!--</el-form-item>-->
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="ruleForm.password" placeholder="密码"></el-input>
         </el-form-item>
 
         <el-dialog
           width="30%"
-          title="请选择"
-          :visible.sync="innerVisible"
+          title="请选择部门"
+          :visible.sync="deptVisible"
           append-to-body>
           <el-input
             placeholder="输入关键字进行过滤"
@@ -136,7 +149,6 @@
           </el-input>
           <el-tree
             style="margin-bottom: 30px"
-            class="filter-tree"
             :data="deptTree"
             :props="defaultProps"
             default-expand-all
@@ -146,17 +158,90 @@
           </el-tree>
         </el-dialog>
 
+        <el-dialog
+          width="30%"
+          title="请选择员工的特殊权限"
+          :visible.sync="permissionVisible"
+          top="10vh"
+          append-to-body>
+          <el-input
+            placeholder="输入关键字进行过滤"
+            style="margin-bottom: 20px"
+            v-model="filterPermission">
+          </el-input>
+          <el-tree
+            :data="menuTree"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            ref="permissionTree"
+            :filter-node-method="filterNode"
+            highlight-current
+            :props="defaultProps">
+          </el-tree>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="closePermission">取 消</el-button>
+              <el-button
+                type="primary"
+                :loading="btnLoading"
+                @click.native.prevent="handleSelectPerm"
+              >确 定</el-button>
+          </span>
+
+        </el-dialog>
+
         <el-form-item label="所属部门" prop="deptName">
           <el-input
             @focus="showDeptTree"
             v-model="ruleForm.deptName"
             placeholder="请选择所属部门"></el-input>
         </el-form-item>
+        <el-form-item label="角色" prop="role">
+          <el-select
+            v-model="ruleForm.role"
+            @focus="getRoles"
+            multiple
+            collapse-tags
+            placeholder="请选择角色">
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="特殊权限" prop="specialPerm">
+          <el-input
+            @focus="showPermissionTree"
+            v-model="ruleForm.specialPerm"
+            placeholder="请选择特殊权限"></el-input>
+        </el-form-item>
+
+        <el-form-item label="状态" prop="locked">
+          <el-select
+            v-model="ruleForm.locked"
+            placeholder="请选择账号状态">
+            <el-option
+              v-for="item in status"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
       </el-form>
       <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm">重置</el-button>
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <el-button
+            type="primary"
+            :loading="btnLoading"
+            @click.native.prevent="handleSubmit"
+          >确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -165,6 +250,9 @@
 <script>
 import { UserApi } from '@/api/user'
 import { DeptApi } from '@/api/dept'
+import { RoleApi } from '@/api/role'
+import { MenuApi } from '@/api/menu'
+import { isvalidatemobile } from '@/tools/validate'
 import { Msg } from '@/tools/message'
 import { mapGetters } from 'vuex'
 
@@ -178,7 +266,14 @@ export default {
     ...mapGetters(['permissions'])
   },
   data () {
+    let validatePhone = (rule, value, callback) => {
+      if (!isvalidatemobile(value)) {
+        callback(new Error('请输入正确的手机号'))
+      }
+      callback()
+    }
     return {
+      dialogType: '',
       query: '',
       headerRowStyle: {
         color: '#909399'
@@ -193,30 +288,59 @@ export default {
       loading: false,
       tableData: {},
       currentPage: 1,
-      pageSize: 1,
+      pageSize: 5,
       dialogVisible: false,
-      innerVisible: false,
+      deptVisible: false,
+      permissionVisible: false,
       ruleForm: {
         userName: '',
+        name: '',
+        email: '',
         password: '',
         deptId: '',
-        deptName: ''
+        deptName: '',
+        phoneNum: '',
+        role: '',
+        locked: '',
+        specialPerm: '', // 字符串数组逗号隔开
+        specialPermIds: []
       },
       rules: {
-        userName: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+        // userName: [
+        //   { required: true, message: '请输入用户名', trigger: 'blur' }
+        // ],
+        phoneNum: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: validatePhone, trigger: 'blur' }
         ],
-        deptName: [
-          { required: true, message: '请选择部门', trigger: 'blur' }
+        role: [
+          { required: true, message: '请选择角色', trigger: 'blur' }
+        ],
+        locked: [
+          { required: true, message: '请选择状态', trigger: 'blur' }
         ]
+        // deptName: [
+        //   { required: true, message: '请选择部门', trigger: 'blur' }
+        // ]
       },
 
       filterText: '',
+      filterPermission: '',
       deptTree: [],
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      roles: [],
+      btnLoading: false,
+      status: [{
+        id: 0,
+        name: '有效'
+      }, {
+        id: 1,
+        name: '冻结'
+      }],
+      menuTree: []
     }
   },
   mounted () {
@@ -225,6 +349,9 @@ export default {
   watch: {
     filterText (val) {
       this.$refs.tree.filter(val)
+    },
+    filterPermission (val) {
+      this.$refs.permissionTree.filter(val)
     }
   },
   methods: {
@@ -246,18 +373,26 @@ export default {
     },
     openDialog (row, type) {
       this.dialogVisible = true
+      this.dialogType = type
       if (type === 'edit') {
         this.dialogInfo.dialogTitle = '编辑'
         this.dialogInfo.userItem = row
+        console.log(row)
+        this.ruleForm.phoneNum = row.phone
+        this.ruleForm.userName = row.userName
+        this.ruleForm.name = row.name
+        this.ruleForm.email = row.email
+        this.ruleForm.password = row.passwordEncrypted
+        this.ruleForm.role = row.role
+        this.ruleForm.specialPermIds = row.specialPermIds
+        this.ruleForm.deptId = row.deptId
+        this.ruleForm.locked = row.locked || 0
       }
       if (type === 'add') {
         this.dialogInfo.dialogTitle = '新增'
         this.dialogInfo.userItem = {}
       }
     },
-    // closeDialog () {
-    //   this.dialogVisible = false
-    // },
     handleSearch () {
       this.loadData()
     },
@@ -272,7 +407,7 @@ export default {
     showDeptTree (e) {
       DeptApi.deptTree().then(res => {
         this.deptTree = res.data.data
-        this.innerVisible = true
+        this.deptVisible = true
       }).catch(err => {
         console.log(err)
         Msg.error('请求数据失败!')
@@ -283,10 +418,114 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     selectDept (dept) {
-      console.log(dept)
-      this.innerVisible = false
+      this.deptVisible = false
       this.ruleForm.deptId = dept.id
       this.ruleForm.deptName = dept.name
+    },
+    getRoles () {
+      RoleApi.roles().then(res => {
+        this.roles = res.data.data
+      }).catch(err => {
+        console.log(err)
+        Msg.error('请求数据失败!')
+      })
+    },
+    showPermissionTree () {
+      MenuApi.menuTree().then(res => {
+        this.menuTree = res.data.data
+        this.permissionVisible = true
+      }).catch(err => {
+        console.log(err)
+        Msg.error('请求数据失败!')
+      })
+    },
+    closePermission () {
+      this.filterPermission = ''
+      this.permissionVisible = false
+    },
+    handleSelectPerm () {
+      this.permissionVisible = false
+      let selected = this.$refs.permissionTree.getCheckedNodes().map(item => {
+        return {
+          id: item.id,
+          name: item.name
+        }
+      })
+      this.ruleForm.specialPermIds = selected.map(item => item.id)
+      this.ruleForm.specialPerm = selected.map(item => item.name).toString()
+    },
+    resetForm () {
+      this.$refs.ruleForm.resetFields()
+    },
+    handleSubmit () {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          this.btnLoading = true
+          let params = {
+            phone: this.ruleForm.phoneNum,
+            userName: this.ruleForm.userName,
+            name: this.ruleForm.name,
+            email: this.ruleForm.email,
+            passwordEncrypted: this.ruleForm.password,
+            roleIds: this.ruleForm.role,
+            permissionIds: this.ruleForm.specialPermIds,
+            deptId: this.ruleForm.deptId,
+            locked: this.ruleForm.locked
+          }
+          if(this.dialogType === 'edit'){
+            UserApi.editUser(params).then(res => {
+              this.btnLoading = false
+              this.dialogVisible = false
+              this.loadData()
+            }).catch(err => {
+              this.btnLoading = false
+              if (err.response.status === 504) {
+                Msg.error('请求超时！')
+              }
+              if (err.response.status === 400) {
+                let { message } = err.response.data.message[0]
+                Msg.error(message)
+              }
+              if (err.response.status === 500) {
+                Msg.error(err.response.data.message)
+              }
+            })
+          }else {
+            UserApi.addUser(params).then(res => {
+              this.btnLoading = false
+              this.dialogVisible = false
+              this.loadData()
+            }).catch(err => {
+              this.btnLoading = false
+              if (err.response.status === 504) {
+                Msg.error('请求超时！')
+              }
+              if (err.response.status === 400) {
+                let { message } = err.response.data.message[0]
+                Msg.error(message)
+              }
+              if (err.response.status === 500) {
+                Msg.error(err.response.data.message)
+              }
+            })
+          }
+        }
+      })
+    },
+    deleteUser (id) {
+      this.$confirm('此操作将删除该用户, 是否继续?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        UserApi.delUser(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.loadData()
+        })
+      })
     }
   }
 }
