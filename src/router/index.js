@@ -40,9 +40,14 @@ const router = new Router({
           component: () => import('../view/admin/dept/index')
         },
         {
-          path: '/admin/log',
+          path: '/sys/log',
           name: 'logmanage',
           component: () => import('../view/admin/log/index')
+        },
+        {
+          path: '/sys/gen',
+          name: 'gencode',
+          component: () => import('../view/admin/gen/index')
         },
         {
           path: '/admin/user/edit',

@@ -5,9 +5,6 @@
 import { server } from '@/tools/server'
 import qs from 'qs'
 
-/**
- * 用户api接口
- */
 export class RoleApi {
   static roles (params) {
     return server({
