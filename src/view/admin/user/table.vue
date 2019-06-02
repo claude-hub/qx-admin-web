@@ -440,7 +440,7 @@ export default {
         this.ruleForm.userName = row.userName
         this.ruleForm.name = row.name
         this.ruleForm.email = row.email
-        this.ruleForm.password = row.passwordEncrypted
+        this.ruleForm.password = ''
         this.ruleForm.role = row.roles.map(item=>item.id)
         // 特殊权限的id
         this.ruleForm.specialPermIds = row.menus.map(item=>item.id)
