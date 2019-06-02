@@ -1,5 +1,5 @@
 import { setStore, getStore, removeStore,
-  setCookies, getCookies, removeCookies } from '@/tools/storage'
+  setCookies, getCookies, removeCookies, setCookiesRemember } from '@/tools/storage'
 import { UserApi } from '@/api/user'
 import { MenuApi } from '@/api/menu'
 import { Msg } from '@/tools/message'
@@ -23,6 +23,10 @@ const user = {
       state.token = current_token
       setCookies('token', current_token)
     },
+    SET_TOKEN_REMEMBER  (state, current_token) {
+      state.token = current_token
+      setCookiesRemember('token', current_token)
+    },
     SET_USER_INFO (state, user_info) {
       state.userInfo = user_info
       setStore('userInfo', user_info)
@@ -39,6 +43,10 @@ const user = {
       removeCookies('token')
     },
     REMOVE_MENU_MSG (state) {
+      // state.userInfo = ''
+      // state.userMenu = []
+      // state.openedPages =[]
+      // state.currentPage = {}
       removeStore('userInfo')
       removeStore('permissions')
       removeStore('openedPages')
@@ -53,7 +61,11 @@ const user = {
       return new Promise((resolve, reject) => {
         UserApi.login(params).then((res) => {
           const data = res.data.data
-          commit('SET_TOKEN', data.currentToken)
+          if(params.remember){
+            commit('SET_TOKEN_REMEMBER', data.currentToken)
+          }else {
+            commit('SET_TOKEN', data.currentToken)
+          }
           commit('SET_USER_INFO', data)
           commit('SET_PERMISSIONS', data.permissions)
           resolve()
@@ -75,6 +87,7 @@ const user = {
     LogOut ({ commit }) {
       commit('REMOVE_TOKEN')
       commit('REMOVE_MENU_MSG')
+      commit('CLOSE_PAGES')
     }
   }
 }

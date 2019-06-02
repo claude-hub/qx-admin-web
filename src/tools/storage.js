@@ -37,6 +37,14 @@ export const setCookies = (name, content) => {
 }
 
 /**
+ * 存储Cookies
+ */
+export const setCookiesRemember = (name, content) => {
+  return Cookies.set(name, content, { expires: 7 })
+}
+
+
+/**
  * 获取Cookies
  */
 export const getCookies = (name) => {

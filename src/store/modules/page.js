@@ -14,6 +14,11 @@ const page = {
     /** 显示上一个打开的页面 **/
     ShowPrePage({commit}, params) {
       commit('SHOW_PRE_PAGE', params)
+    },
+    /** 关闭其他打开的页面 **/
+    CloseOthersPage ({ commit }, params) {
+      commit('SET_CURRENT_PAGE', params)
+      commit('CLOSE_OTHERS_PAGE', params)
     }
   },
   /** 更改 Vuex 的 store 中的状态的唯一方法是提交 mutation */
@@ -45,6 +50,18 @@ const page = {
           setStore('currentPage', state.currentPage)
         }
       })
+    },
+    CLOSE_OTHERS_PAGE: (state, currentPage) => {
+      state.openedPages = []
+      state.openedPages.push({
+        name: currentPage.name,
+        path: currentPage.path
+      })
+      setStore('openedPages', state.openedPages)
+    },
+    CLOSE_PAGES: (state) => {
+      state.openedPages =[]
+      state.currentPage = {}
     }
   }
 }

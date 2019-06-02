@@ -1,0 +1,21 @@
+.aside {
+  transition: width .6s;
+  &.is-active {  /* &为父级选择器，这里 & => .aside*/
+    width: 64px !important;
+    transition: width .6s;
+    .logo {
+      width: 64px !important;
+    }
+    .el-submenu__icon-arrow {
+      display: none;
+    }
+    .el-menu--display {
+      height: 0;
+      width: 0;
+      overflow: hidden;
+      visibility: hidden;
+      display: inline-block;
+    }
+  }
+}
+

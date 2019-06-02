@@ -5,7 +5,7 @@ const common = {
     /** 默认首页路由、名字 **/
     defaultHomePage: {
       name: '首页',
-      path: '/admin'
+      path: '/'
     },
     /** 菜单是否缩放 **/
     isCollapse: false,

@@ -11,7 +11,7 @@ const router = new Router({
     //   component: () => import('../view/client/home/index'),
     // },
     {
-      path: '/admin',
+      path: '/',
       component: () => import('../view/admin/layout/index'),
       children: [
         {
@@ -62,7 +62,7 @@ const router = new Router({
     //   component: () => import('../view/admin/login/index')
     // }
     {
-      path: '/',
+      path: '/login',
       name: 'login',
       component: () => import('../view/admin/login/index')
     }
