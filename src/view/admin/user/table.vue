@@ -106,6 +106,7 @@
           <el-tooltip class="item" effect="dark" content="编辑" placement="left">
             <el-button
               size="mini"
+              v-if="sys_user_edit"
               icon="el-icon-edit"
               circle type="primary"
               plain
@@ -113,7 +114,9 @@
             ></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
-            <el-button size="mini" icon="el-icon-delete" circle type="danger" plain @click="deleteUser(scope.row.id)"></el-button>
+            <el-button size="mini"
+                       v-if="sys_user_del"
+                       icon="el-icon-delete" circle type="danger" plain @click="deleteUser(scope.row.id)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -145,9 +148,9 @@
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="ruleForm.userName" placeholder="请输入用户名"></el-input>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="ruleForm.name" placeholder="请输入姓名"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="姓名" prop="name">-->
+          <!--<el-input v-model="ruleForm.name" placeholder="请输入姓名"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="ruleForm.email" placeholder="请输入邮箱"></el-input>
         </el-form-item>
@@ -286,6 +289,7 @@ import TreeSelect from '@/components/tree-select.vue';
 
 export default {
   created () {
+    this.$store.dispatch('GetUserInfo')
     this.sys_user_add = this.permissions.includes('sys_user_add')
     this.sys_user_edit = this.permissions.includes('sys_user_edit')
     this.sys_user_del = this.permissions.includes('sys_user_del')

@@ -1,9 +1,9 @@
 <template>
   <div class="content">
     <div>
-      <el-button type="primary" @click="addDept">新增</el-button>
-      <el-button type="primary" @click="editDept">修改</el-button>
-      <el-button type="primary" @click="delDept">删除</el-button>
+      <el-button type="primary" v-if="sys_dept_add" @click="addDept">新增</el-button>
+      <el-button type="primary" v-if="sys_dept_edit" @click="editDept">修改</el-button>
+      <el-button type="primary" v-if="sys_dept_del" @click="delDept">删除</el-button>
     </div>
     <div class="tree">
       <div class="dept-tree">
@@ -67,9 +67,10 @@
 export default {
   name: 'deptmanage',
   created () {
-    this.sys_user_add = this.permissions.includes('sys_user_add')
-    this.sys_user_edit = this.permissions.includes('sys_user_edit')
-    this.sys_user_del = this.permissions.includes('sys_user_del')
+    this.$store.dispatch('GetUserInfo')
+    this.sys_dept_add = this.permissions.includes('sys_dept_add')
+    this.sys_dept_edit = this.permissions.includes('sys_dept_edit')
+    this.sys_dept_del = this.permissions.includes('sys_dept_del')
     this.showDeptTree()
   },
   computed: {

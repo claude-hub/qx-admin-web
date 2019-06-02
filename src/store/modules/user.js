@@ -74,6 +74,16 @@ const user = {
         })
       })
     },
+    GetUserInfo ({ commit }){
+      return new Promise((resolve, reject) => {
+        UserApi.getUserInfo().then((res) => {
+          commit('SET_USER_INFO', res.data.data)
+          commit('SET_PERMISSIONS', res.data.data.permissions)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
     /** 获取用户动态菜单 */
     GetUserMenu ({ commit }, params) {
       return new Promise((resolve, reject) => {

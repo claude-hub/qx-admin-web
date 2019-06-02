@@ -32,6 +32,7 @@ export default {
     //     initMenu(this.$router, data)
     //   })
     // }
+    this.$store.dispatch('GetUserInfo')
     this.$store.dispatch('GetUserMenu').then(data => {
       initMenu(this.$router, data)
     })

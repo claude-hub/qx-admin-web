@@ -17,7 +17,7 @@
         <!--</el-tooltip>-->
         <el-dropdown class="item-operate" size="small">
               <span class="el-dropdown-link">
-                {{userInfo.name}}
+                {{userInfo.userName || userInfo.phone}}
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </span>
           <el-dropdown-menu slot="dropdown">

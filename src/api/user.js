@@ -12,6 +12,9 @@ export class UserApi {
       params: params
     })
   }
+  static getUserInfo () {
+    return server.get('/admin/sysUser/userInfo')
+  }
   static getUserList (params) {
     return server({
       url: '/admin/sysUser/list',
