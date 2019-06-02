@@ -33,7 +33,6 @@
     </div>
     <el-table
       :data="tableData.data"
-      size="small"
       v-loading=loading
       :header-row-style="headerRowStyle"
       :header-cell-style="headerCellStyle"
@@ -92,8 +91,10 @@
         width="100"
         label="状态">
         <template slot-scope="scope">
-          <el-button disabled size="mini" type="success" plain v-if="scope.row.locked == null">正常</el-button>
-          <el-button disabled size="mini" type="danger" plain v-else>冻结</el-button>
+          <el-tag v-if="scope.row.locked == null" type="success">正常</el-tag>
+          <!--<el-button disabled size="mini" type="success" plain v-if="scope.row.locked == null">正常</el-button>-->
+          <!--<el-button disabled size="mini" type="danger" plain v-else>冻结</el-button>-->
+          <el-tag type="danger" plain v-else>冻结</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -338,7 +339,7 @@ export default {
         locked: '',
         // specialPerm: '', // 字符串数组逗号隔开
         specialPermIds: [],
-        updatedAt: '', //上此更新的时间
+        version: '', //乐观锁版本
         id: '' //主键id
       },
       rules: {
@@ -449,7 +450,7 @@ export default {
         depts.push(row.deptId)
         this.selectDeptCheckedKeys = depts
         this.ruleForm.locked = row.locked || 0
-        this.ruleForm.updatedAt = row.updatedAt
+        this.ruleForm.version = row.version
         this.ruleForm.id = row.id
       }
       if (type === 'add') {
@@ -477,10 +478,10 @@ export default {
         // Msg.error('请求数据失败!')
       })
     },
-    filterNode (value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    },
+    // filterNode (value, data) {
+    //   if (!value) return true
+    //   return data.label.indexOf(value) !== -1
+    // },
     // selectDept (dept) {
     //   this.deptVisible = false
     //   this.ruleForm.deptId = dept.id
@@ -540,7 +541,7 @@ export default {
           }
           if(this.dialogType === 'edit'){
             params.id = this.ruleForm.id
-            params.updatedAt = this.ruleForm.updatedAt
+            params.version = this.ruleForm.version
             UserApi.editUser(params).then(res => {
               this.btnLoading = false
               this.dialogVisible = false
