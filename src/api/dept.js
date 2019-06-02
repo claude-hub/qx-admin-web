@@ -19,4 +19,8 @@ export class DeptApi {
   static editDept (params) {
     return server.put('/admin/sysDept/update', qs.stringify(params, { indices: false }))
   }
+
+  static delDept (params) {
+    return server.post('/admin/sysDept/delete', qs.stringify(params, { indices: false }))
+  }
 }

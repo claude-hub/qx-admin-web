@@ -595,7 +595,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        UserApi.delUser(id).then(res => {
+        let params = {
+          id: id
+        }
+        UserApi.delUser(params).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'

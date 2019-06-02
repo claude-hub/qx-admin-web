@@ -22,8 +22,8 @@ export class UserApi {
   static addUser (params) {
     return server.post('/admin/sysUser/add', qs.stringify(params, { indices: false }))
   }
-  static delUser (id) {
-    return server.delete(`/admin/sysUser/delete`, id)
+  static delUser (params) {
+    return server.post('/admin/sysUser/delete', qs.stringify(params, { indices: false }))
   }
   static editUser (params) {
     return server.put('/admin/sysUser/update', qs.stringify(params, { indices: false }))

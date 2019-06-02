@@ -3,7 +3,7 @@
     <div>
       <el-button type="primary" @click="addDept">新增</el-button>
       <el-button type="primary" @click="editDept">修改</el-button>
-      <el-button type="primary">删除</el-button>
+      <el-button type="primary" @click="delDept">删除</el-button>
     </div>
     <div class="tree">
       <div class="dept-tree">
@@ -147,6 +147,28 @@ export default {
       }
       this.disabled = false
     },
+    delDept () {
+      if(this.ruleForm.id === ''){
+        Msg.error("请选择部门")
+        return
+      }
+      this.$confirm('此操作将删除部门, 是否继续?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          id: this.ruleForm.id
+        }
+        DeptApi.delDept(params).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.showDeptTree()
+        })
+      })
+    },
     submit () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
@@ -195,29 +217,6 @@ export default {
           }
         }
       })
-
-      // if (this.type === 'add'){
-      //   this.$refs.ruleForm.validate(valid => {
-      //     if (valid) {
-      //       this.loading = true
-      //       let params = {
-      //         name: this.ruleForm.name,
-      //         parentId: this.ruleForm.parentId,
-      //         sort: this.ruleForm.sort
-      //       }
-      //       DeptApi.addDept(params).then(res=>{
-      //         this.loading = false
-      //         this.$message({
-      //           type: 'success',
-      //           message: '新增成功!'
-      //         })
-      //         this.showDeptTree()
-      //       }).catch(err=>{
-      //         console.log(err)
-      //       })
-      //     }
-      //   })
-      // }
     }
   }
 }
