@@ -61,19 +61,10 @@
       <el-table-column
         align="center"
         prop="operate"
-        width="160"
+        width="120"
         label="操作">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="授权" placement="left">
-            <el-button
-              size="mini"
-              icon="el-icon-plus"
-              circle type="primary"
-              plain
-              @click="showAddPerm(scope.row.id)"
-            ></el-button>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+          <el-tooltip class="item" effect="dark" content="编辑" placement="left">
             <el-button
               size="mini"
               icon="el-icon-edit"
@@ -135,72 +126,26 @@
           >确 定</el-button>
       </span>
     </el-dialog>
-
-
-
-    <el-dialog
-    width="30%"
-    title="请选择角色权限"
-    :visible.sync="permission.visible"
-    top="10vh"
-    append-to-body>
-    <el-input
-    placeholder="输入关键字进行过滤"
-    style="margin-bottom: 20px"
-    v-model="filterPermission">
-    </el-input>
-    <el-tree
-    :data="permission.menuTree"
-    show-checkbox
-    default-expand-all
-    node-key="id"
-    ref="permissionTree"
-    :default-checked-keys='selectedKays'
-    :filter-node-method="filterNode"
-    highlight-current
-    :props="defaultProps">
-    </el-tree>
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="closePermission">取 消</el-button>
-    <el-button
-    type="primary"
-    :loading="permission.loading"
-    @click.native.prevent="handleSelectPerm"
-    >确 定</el-button>
-    </span>
-
-    </el-dialog>
   </div>
 </template>
 <script>
   import { Msg } from '@/tools/message'
   import { mapGetters } from 'vuex'
   import { RoleApi } from '@/api/role'
-  import { MenuApi } from '@/api/menu'
 
 export default {
-  name: 'rolemanage',
+  name: 'order',
   created () {
     this.sys_user_add = this.permissions.includes('sys_user_add')
     this.sys_user_edit = this.permissions.includes('sys_user_edit')
     this.sys_user_del = this.permissions.includes('sys_user_del')
     this.loadData()
-    MenuApi.menuTree().then(res => {
-      this.permission.menuTree = res.data.data
-    })
   },
   computed: {
     ...mapGetters(['permissions'])
   },
-  watch: {
-    filterPermission (val) {
-      this.$refs.permissionTree.filter(val)
-    }
-  },
   data () {
     return{
-      roleId: '',
       query: '',
       tableData: {},
       loading: false,
@@ -212,15 +157,6 @@ export default {
       },
       currentPage: 1,
       pageSize: 5,
-
-      filterPermission: '',
-      permission: {
-        visible: false,
-        menuTree: [],
-        loading: false,
-      },
-
-
       dialog: {
         visible: false,
         title: '',
@@ -241,12 +177,7 @@ export default {
         roleCode: [
           {required: true, message: '请输入角色码', trigger: 'blur'},
         ]
-      },
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      },
-      selectedKays: []
+      }
     }
   },
   methods: {
@@ -352,40 +283,7 @@ export default {
           this.loadData()
         })
       })
-    },
-    showAddPerm (id) {
-      MenuApi.roleMenu(id).then(res => {
-        this.selectedKays = res.data.data.map(item=>item.id)
-        this.permission.visible = true
-        this.roleId = id
-      })
-    },
-    filterNode (value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    },
-    closePermission () {
-      this.filterPermission = ''
-      this.permission.visible = false
-    },
-    handleSelectPerm () {
-      this.permission.loading = true
-      // this.permissionVisible = false
-      let selected = this.$refs.permissionTree.getCheckedNodes().map(item => item.id)
-      console.log(selected, this.roleId)
-
-      let params = {
-        roleId: this.roleId,
-        menuIds: selected
-      }
-      RoleApi.addRolePerms(params).then(res=>{
-        this.permission.loading = false
-        Msg.success("授权成功!")
-        this.permission.visible = false
-      }).catch(err=>{
-        this.permission.loading = false
-      })
-    },
+    }
   }
 }
 </script>

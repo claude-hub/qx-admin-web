@@ -8,7 +8,7 @@
         <br/>
         <span>
           <el-collapse v-model="activeNames">
-            <el-collapse-item title="千寻框架---微服务架构" name="1">
+            <el-collapse-item title="微服务架构" name="1">
               <div>基于Spring Cloud Greenwich.RELEASE</div>
               <div>基于Spring Boot 2.1.3.RELEASE</div>
             </el-collapse-item>

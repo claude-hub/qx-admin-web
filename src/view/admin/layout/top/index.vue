@@ -89,7 +89,7 @@ export default {
     border-bottom: 1px solid #eee;
     .left-menu {
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       .tags-breadcrumb {
         cursor: pointer;
         .iconmenu {

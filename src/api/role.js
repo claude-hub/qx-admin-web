@@ -22,4 +22,7 @@ export class RoleApi {
   static delRole (params) {
     return server.post('/admin/sysRole/delete', qs.stringify(params, { indices: false }))
   }
+  static addRolePerms (params) {
+    return server.post('/admin/sysRole/rolePermissions', qs.stringify(params, { indices: false }))
+  }
 }

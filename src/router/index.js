@@ -53,6 +53,11 @@ const router = new Router({
           path: '/admin/user/edit',
           name: 'edituser',
           component: () => import('../view/admin/user/eidt')
+        },
+        {
+          path: '/order',
+          name: 'order',
+          component: () => import('../view/admin/order/index')
         }
       ]
     },

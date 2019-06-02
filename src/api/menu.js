@@ -9,6 +9,9 @@ export class MenuApi {
     return server.get('/admin/sysMenu/userMenus', params)
   }
 
+  static roleMenu(id) {
+    return server.get(`/admin/sysMenu/roleMenus?id=${id}`)
+  }
   /**
    * 树形菜单
    */

@@ -80,11 +80,11 @@
         width="140"
         label="创建时间">
       </el-table-column>
-      <el-table-column
-        prop="signInCount"
-        align="center"
-        label="登录次数">
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="signInCount"-->
+        <!--align="center"-->
+        <!--label="登录次数">-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="status"
         align="center"
