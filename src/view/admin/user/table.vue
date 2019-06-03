@@ -439,7 +439,6 @@ export default {
       if (type === 'edit') {
         this.dialogInfo.dialogTitle = '编辑'
         this.dialogInfo.userItem = row
-        console.log(row)
         this.ruleForm.phoneNum = row.phone
         this.ruleForm.userName = row.userName
         this.ruleForm.name = row.name
@@ -447,8 +446,11 @@ export default {
         this.ruleForm.password = ''
         this.ruleForm.role = row.roles.map(item=>item.id)
         // 特殊权限的id
-        this.ruleForm.specialPermIds = row.menus.map(item=>item.id)
-        this.selectPermCheckedKeys = row.menus.map(item=>item.id)
+        if(row.menus && row.menus.length !==0){
+          this.ruleForm.specialPermIds = row.menus.map(item=>item.id)
+          this.selectPermCheckedKeys = row.menus.map(item=>item.id)
+        }
+       
         this.ruleForm.deptId = row.deptId
         let depts = []
         depts.push(row.deptId)
@@ -548,6 +550,9 @@ export default {
             params.version = this.ruleForm.version
             UserApi.editUser(params).then(res => {
               this.btnLoading = false
+              if(!res.data.data.success){
+                Msg.error(res.data.data.message)
+              }
               this.dialogVisible = false
               this.loadData()
             }).catch(err => {

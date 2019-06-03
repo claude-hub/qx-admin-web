@@ -5,7 +5,7 @@
         <el-input
           clearable
           v-model="query"
-          placeholder="角色信息"
+          placeholder="订单信息"
           class="query-input"
           style="width: 150px"
           @keyup.enter.native="handleSearch"
@@ -40,15 +40,7 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="角色名">
-      </el-table-column>
-      <el-table-column
-        prop="roleCode"
-        label="角色码">
-      </el-table-column>
-      <el-table-column
-        prop="roleDesc"
-        label="角色描述">
+        label="订单名称">
       </el-table-column>
       <el-table-column
         prop="createdAt"
@@ -99,25 +91,13 @@
       top="10vh"
       width="40%">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="70px">
-        <el-form-item label="角色名" prop="name">
+        <el-form-item label="订单名" prop="name">
           <el-input
             v-model="ruleForm.name"
-            placeholder="请输入角色名"></el-input>
-        </el-form-item>
-        <el-form-item label="角色码" prop="roleCode">
-          <el-input
-            v-model="ruleForm.roleCode"
-            placeholder="请输入角色码"></el-input>
-        </el-form-item>
-
-        <el-form-item label="角色描述" prop="roleDesc">
-          <el-input
-            v-model="ruleForm.roleDesc"
-            placeholder="请输入角色描述"></el-input>
+            placeholder="请输入订单名"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <!--<el-button @click="resetForm">重置</el-button>-->
         <el-button @click="closeDialogBtn">取 消</el-button>
           <el-button
             type="primary"
@@ -131,7 +111,7 @@
 <script>
   import { Msg } from '@/tools/message'
   import { mapGetters } from 'vuex'
-  import { RoleApi } from '@/api/role'
+  import { OrderApi } from '@/api/order'
 
 export default {
   name: 'order',
@@ -172,10 +152,7 @@ export default {
       },
       rules: {
         name: [
-          {required: true, message: '请输入角色名', trigger: 'blur'},
-        ],
-        roleCode: [
-          {required: true, message: '请输入角色码', trigger: 'blur'},
+          {required: true, message: '请输入订单名', trigger: 'blur'},
         ]
       }
     }
@@ -188,7 +165,7 @@ export default {
         page: this.currentPage,
         pageSize: this.pageSize
       }
-      RoleApi.roles(params).then((res) => {
+      OrderApi.orders(params).then((res) => {
         this.loading = false
         this.tableData = res.data
       }).catch((err) => {
@@ -216,8 +193,6 @@ export default {
       if (type === 'edit') {
         this.dialog.title = '修改'
         this.ruleForm.name = row.name
-        this.ruleForm.roleCode = row.roleCode
-        this.ruleForm.roleDesc = row.roleDesc
         this.ruleForm.id = row.id
         this.ruleForm.version = row.version
       }
@@ -245,7 +220,7 @@ export default {
           if (this.dialog.type === 'edit') {
             params.id = this.ruleForm.id
             params.version = this.ruleForm.version
-            RoleApi.editRole(params).then(res => {
+            OrderApi.editOrder(params).then(res => {
               this.dialog.visible = false
               this.dialog.submitLoading = false
               this.loadData()
@@ -254,7 +229,7 @@ export default {
               Msg.error(err.message)
             })
           } else {
-            RoleApi.addRole(params).then(res => {
+            OrderApi.addOrder(params).then(res => {
               this.dialog.visible = false
               this.dialog.submitLoading = false
               this.loadData()
@@ -267,7 +242,7 @@ export default {
       })
     },
     deleteItem (id) {
-      this.$confirm('此操作将删除该角色, 是否继续?', '警告', {
+      this.$confirm('此操作将删除该订单, 是否继续?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -275,7 +250,7 @@ export default {
         let params = {
           id: id
         }
-        RoleApi.delRole(params).then(res => {
+        OrderApi.delOrder(params).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'
